@@ -12,23 +12,24 @@
     "db:push": "prisma db push"
   },
   "dependencies": {
-    "express": "^4.18.3",
-    "socket.io": "^4.7.5",
-    "jsonwebtoken": "^9.0.2",
     "@prisma/client": "^5.14.0",
+    "azkivz-shared": "*",
     "cors": "^2.8.5",
-    "azkivz-shared": "*"
+    "dotenv": "^17.4.2",
+    "express": "^4.18.3",
+    "jsonwebtoken": "^9.0.2",
+    "socket.io": "^4.7.5"
   },
   "devDependencies": {
-    "prisma": "^5.14.0",
-    "tsx": "^4.15.6",
-    "typescript": "^5.4.5",
-    "vitest": "^1.6.0",
-    "supertest": "^7.0.0",
+    "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
     "@types/jsonwebtoken": "^9.0.6",
+    "@types/node": "^20.14.0",
     "@types/supertest": "^6.0.2",
-    "@types/cors": "^2.8.17",
-    "@types/node": "^20.14.0"
+    "prisma": "^5.14.0",
+    "supertest": "^7.0.0",
+    "tsx": "^4.15.6",
+    "typescript": "^5.4.5",
+    "vitest": "^1.6.0"
   }
 }
