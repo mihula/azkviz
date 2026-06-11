@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import PinGate from '../components/PinGate'
 import { Question, QuestionInput, Round } from 'azkivz-shared'
 
@@ -11,25 +11,32 @@ export default function AdminPage() {
   const [importText, setImportText] = useState('')
   const [importStatus, setImportStatus] = useState('')
 
-  if (!token) return <PinGate onSuccess={(t) => { localStorage.setItem('mod_token', t); setToken(t) }} />
-
-  const authHeaders: Record<string, string> = { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }
+  // All hooks MUST be before any early return
+  const authHeaders = useMemo<Record<string, string>>(
+    () => ({ Authorization: `Bearer ${token ?? ''}`, 'Content-Type': 'application/json' }),
+    [token]
+  )
 
   const fetchQuestions = useCallback(async () => {
+    if (!token) return
     const url = filterRound ? `/api/questions?round=${filterRound}` : '/api/questions'
     const res = await fetch(url, { headers: authHeaders })
     if (res.ok) setQuestions(await res.json())
-  }, [filterRound, token])
+  }, [filterRound, token, authHeaders])
 
   useEffect(() => { fetchQuestions() }, [fetchQuestions])
 
+  if (!token) return <PinGate onSuccess={(t) => { localStorage.setItem('mod_token', t); setToken(t) }} />
+
   async function handleSave(e: React.FormEvent) {
     e.preventDefault()
+    let res: Response
     if (editing !== null) {
-      await fetch(`/api/questions/${editing}`, { method: 'PUT', headers: authHeaders, body: JSON.stringify(form) })
+      res = await fetch(`/api/questions/${editing}`, { method: 'PUT', headers: authHeaders, body: JSON.stringify(form) })
     } else {
-      await fetch('/api/questions', { method: 'POST', headers: authHeaders, body: JSON.stringify(form) })
+      res = await fetch('/api/questions', { method: 'POST', headers: authHeaders, body: JSON.stringify(form) })
     }
+    if (!res.ok) { alert('Uložení selhalo'); return }
     setForm({})
     setEditing(null)
     fetchQuestions()
@@ -37,7 +44,8 @@ export default function AdminPage() {
 
   async function handleDelete(id: number) {
     if (!confirm('Smazat otázku?')) return
-    await fetch(`/api/questions/${id}`, { method: 'DELETE', headers: authHeaders })
+    const res = await fetch(`/api/questions/${id}`, { method: 'DELETE', headers: authHeaders })
+    if (!res.ok) { alert('Smazání selhalo'); return }
     fetchQuestions()
   }
 
@@ -50,8 +58,8 @@ export default function AdminPage() {
       setImportStatus(`✓ Importováno ${result.imported} otázek`)
       setImportText('')
       fetchQuestions()
-    } catch (e: any) {
-      setImportStatus(`✗ Chyba: ${e.message}`)
+    } catch (e: unknown) {
+      setImportStatus(`✗ Chyba: ${e instanceof Error ? e.message : String(e)}`)
     }
   }
 
