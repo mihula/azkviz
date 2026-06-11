@@ -1,0 +1,32 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Question {
+  id          Int      @id @default(autoincrement())
+  round       String   // "NUMBERS" | "LETTERS"
+  fieldNumber Int
+  text        String
+  answer      String
+  createdAt   DateTime @default(now())
+
+  @@unique([round, fieldNumber])
+}
+
+model GameState {
+  id          Int      @id @default(1)
+  status      String   @default("WAITING")   // "WAITING" | "PLAYING" | "FINISHED"
+  round       String   @default("NUMBERS")
+  player1Name String   @default("")
+  player2Name String   @default("")
+  activeField Int?
+  claimedP1   String   @default("[]")        // JSON array of Int
+  claimedP2   String   @default("[]")        // JSON array of Int
+  winner      Int?
+  updatedAt   DateTime @updatedAt
+}
