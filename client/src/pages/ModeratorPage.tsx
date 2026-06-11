@@ -1,1 +1,165 @@
-export default function ModeratorPage() { return <div>Moderátor (brzy)</div> }
+import { useState } from 'react'
+import { useGameSocket } from '../hooks/useGameSocket'
+import HexBoard from '../components/HexBoard'
+import PinGate from '../components/PinGate'
+import { Question, Round } from 'azkivz-shared'
+
+export default function ModeratorPage() {
+  const [token, setToken] = useState<string | null>(() => localStorage.getItem('mod_token'))
+  const { gameState, socket } = useGameSocket(token ?? undefined)
+  const [question, setQuestion] = useState<Question | null>(null)
+  const [startForm, setStartForm] = useState({ p1: '', p2: '', round: 'NUMBERS' as Round })
+
+  if (!token) return <PinGate onSuccess={(t) => { localStorage.setItem('mod_token', t); setToken(t) }} />
+
+  async function loadQuestion(fieldNumber: number) {
+    if (!token) return
+    const res = await fetch(`/api/questions/field?round=${gameState.round}&fieldNumber=${fieldNumber}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    if (res.ok) setQuestion(await res.json())
+    else setQuestion(null)
+  }
+
+  function handleFieldClick(fieldNumber: number) {
+    socket?.emit('moderator:selectField', { fieldNumber })
+    loadQuestion(fieldNumber)
+  }
+
+  function handleClaim(player: 1 | 2) {
+    socket?.emit('moderator:claimField', { player })
+    setQuestion(null)
+  }
+
+  function handleSkip() {
+    socket?.emit('moderator:skipField')
+    setQuestion(null)
+  }
+
+  function handleStart(e: React.FormEvent) {
+    e.preventDefault()
+    socket?.emit('moderator:startGame', {
+      player1Name: startForm.p1,
+      player2Name: startForm.p2,
+      round: startForm.round,
+    })
+  }
+
+  const isWaiting = gameState.status === 'WAITING'
+  const isFinished = gameState.status === 'FINISHED'
+
+  return (
+    <div style={{ height: '100vh', width: '100vw', overflow: 'hidden', display: 'grid', gridTemplateColumns: '1fr 380px', gridTemplateRows: '48px 1fr', background: '#0d1117', position: 'relative', zIndex: 1 }}>
+      {/* Top bar */}
+      <div style={{ gridColumn: '1/-1', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 16px', borderBottom: '1px solid rgba(255,255,255,0.07)', background: 'rgba(255,255,255,0.03)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <span style={{ fontSize: '1.1rem', fontWeight: 900, background: 'linear-gradient(135deg, #f97316, #fbbf24)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>AZkvíz</span>
+          <span style={{ background: 'rgba(139,92,246,0.2)', border: '1px solid rgba(139,92,246,0.4)', borderRadius: 20, padding: '2px 10px', fontSize: '0.7rem', fontWeight: 600, color: '#a78bfa', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Moderátor</span>
+        </div>
+        <div style={{ fontSize: '0.75rem', color: '#475569' }}>
+          {isWaiting ? 'Čeká na start' : isFinished ? `Vítěz: ${gameState.winner === 1 ? gameState.player1Name : gameState.player2Name}` : `Kolo ${gameState.round === 'NUMBERS' ? '1' : '2'} — Probíhá`}
+        </div>
+        <button onClick={() => { localStorage.removeItem('mod_token'); setToken(null) }} style={{ padding: '4px 12px', borderRadius: 6, border: '1px solid rgba(255,255,255,0.1)', background: 'transparent', color: '#64748b', cursor: 'pointer', fontSize: '0.75rem' }}>
+          Odhlásit
+        </button>
+      </div>
+
+      {/* Left: Board */}
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 12, borderRight: '1px solid rgba(255,255,255,0.07)', gap: 10, overflow: 'hidden' }}>
+        <HexBoard gameState={gameState} onFieldClick={gameState.status === 'PLAYING' ? handleFieldClick : undefined} compact />
+        <div style={{ display: 'flex', gap: 8, width: '100%' }}>
+          {[1, 2].map((p) => {
+            const name = p === 1 ? gameState.player1Name : gameState.player2Name
+            const color = p === 1
+              ? { bg: 'rgba(249,115,22,.15)', border: 'rgba(249,115,22,.3)', dot: '#f97316' }
+              : { bg: 'rgba(34,211,238,.15)', border: 'rgba(34,211,238,.3)', dot: '#22d3ee' }
+            return (
+              <div key={p} style={{ flex: 1, borderRadius: 10, padding: '8px 12px', display: 'flex', alignItems: 'center', gap: 8, border: `1px solid ${color.border}`, background: color.bg, flexDirection: p === 2 ? 'row-reverse' : 'row' }}>
+                <div style={{ width: 10, height: 10, borderRadius: '50%', background: color.dot, boxShadow: `0 0 6px ${color.dot}`, flexShrink: 0 }} />
+                <span style={{ fontSize: '0.9rem', fontWeight: 700, color: '#f1f5f9' }}>{name || `Hráč ${p}`}</span>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+
+      {/* Right: Control panel */}
+      <div style={{ display: 'flex', flexDirection: 'column', padding: 16, gap: 12, overflowY: 'auto' }}>
+        {isWaiting && (
+          <form onSubmit={handleStart} style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <div style={{ fontSize: '0.65rem', fontWeight: 700, color: '#475569', letterSpacing: '1.5px', textTransform: 'uppercase' }}>Nová hra</div>
+            <input value={startForm.p1} onChange={e => setStartForm(s => ({ ...s, p1: e.target.value }))} placeholder="Jméno hráče 1" style={{ padding: '8px 12px', borderRadius: 8, border: '1px solid rgba(249,115,22,0.3)', background: 'rgba(249,115,22,0.08)', color: '#f1f5f9', fontSize: '0.9rem', outline: 'none' }} />
+            <input value={startForm.p2} onChange={e => setStartForm(s => ({ ...s, p2: e.target.value }))} placeholder="Jméno hráče 2" style={{ padding: '8px 12px', borderRadius: 8, border: '1px solid rgba(34,211,238,0.3)', background: 'rgba(34,211,238,0.08)', color: '#f1f5f9', fontSize: '0.9rem', outline: 'none' }} />
+            <select value={startForm.round} onChange={e => setStartForm(s => ({ ...s, round: e.target.value as Round }))} style={{ padding: '8px 12px', borderRadius: 8, border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.05)', color: '#f1f5f9', fontSize: '0.9rem' }}>
+              <option value="NUMBERS">1. kolo — Čísla</option>
+              <option value="LETTERS">2. kolo — Písmena</option>
+            </select>
+            <button type="submit" style={{ padding: '10px', borderRadius: 8, border: 'none', background: 'linear-gradient(135deg, #22c55e, #15803d)', color: 'white', fontWeight: 700, cursor: 'pointer', fontSize: '0.9rem' }}>▶ Spustit hru</button>
+          </form>
+        )}
+
+        {gameState.status === 'PLAYING' && (
+          <>
+            {/* Active field display */}
+            <div>
+              <div style={{ fontSize: '0.65rem', fontWeight: 700, color: '#475569', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: 6 }}>Aktivní pole</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, background: 'rgba(251,191,36,0.08)', border: '1px solid rgba(251,191,36,0.2)', borderRadius: 12, padding: '12px 14px' }}>
+                <div style={{ width: 52, height: 60, clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)', background: 'linear-gradient(160deg, #fef08a, #fbbf24 55%, #d97706)', color: '#1c0f00', fontWeight: 900, fontSize: '1.3rem', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, filter: 'drop-shadow(0 0 10px rgba(251,191,36,0.7))' }}>
+                  {gameState.activeField ?? '—'}
+                </div>
+                <div>
+                  <div style={{ fontSize: '0.7rem', color: '#94a3b8' }}>Vybráno</div>
+                  <div style={{ fontSize: '1.1rem', fontWeight: 800, color: '#fde68a' }}>{gameState.activeField ? `Pole ${gameState.activeField}` : 'Klikni na pole'}</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Question display */}
+            {question && (
+              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 8 }}>
+                <div style={{ fontSize: '0.65rem', fontWeight: 700, color: '#475569', letterSpacing: '1.5px', textTransform: 'uppercase' }}>Otázka</div>
+                <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 12, padding: 14, display: 'flex', flexDirection: 'column', gap: 10, flex: 1 }}>
+                  <div style={{ fontSize: '1rem', fontWeight: 500, color: '#e2e8f0', lineHeight: 1.5 }}>{question.text}</div>
+                  <div style={{ height: 1, background: 'rgba(255,255,255,0.08)' }} />
+                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
+                    <span style={{ fontSize: '0.65rem', fontWeight: 700, color: '#22d3ee', letterSpacing: 1, textTransform: 'uppercase', paddingTop: 2, flexShrink: 0 }}>Odpověď</span>
+                    <span style={{ fontSize: '1rem', fontWeight: 700, color: '#a5f3fc', lineHeight: 1.4 }}>{question.answer}</span>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Action buttons */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              <div style={{ fontSize: '0.65rem', fontWeight: 700, color: '#475569', letterSpacing: '1.5px', textTransform: 'uppercase' }}>Přiřadit pole</div>
+              <button disabled={!gameState.activeField} onClick={() => handleClaim(1)} style={{ width: '100%', padding: 12, border: 'none', borderRadius: 10, background: 'linear-gradient(135deg, #f97316, #c2410c)', color: 'white', fontWeight: 700, cursor: 'pointer', fontSize: '0.95rem', opacity: gameState.activeField ? 1 : 0.4 }}>
+                🟠 {gameState.player1Name || 'Hráč 1'} získal pole
+              </button>
+              <button disabled={!gameState.activeField} onClick={() => handleClaim(2)} style={{ width: '100%', padding: 12, border: 'none', borderRadius: 10, background: 'linear-gradient(135deg, #22d3ee, #0e7490)', color: '#042f2e', fontWeight: 700, cursor: 'pointer', fontSize: '0.95rem', opacity: gameState.activeField ? 1 : 0.4 }}>
+                🔵 {gameState.player2Name || 'Hráč 2'} získal pole
+              </button>
+              <div style={{ display: 'flex', gap: 8 }}>
+                <button onClick={handleSkip} style={{ flex: 1, padding: 10, borderRadius: 10, border: '1px solid rgba(255,255,255,0.12)', background: 'rgba(255,255,255,0.05)', color: '#94a3b8', fontWeight: 600, cursor: 'pointer', fontSize: '0.85rem' }}>⏭ Přeskočit</button>
+                <button onClick={() => socket?.emit('moderator:resetGame')} style={{ flex: 1, padding: 10, borderRadius: 10, border: '1px solid rgba(239,68,68,0.25)', background: 'rgba(239,68,68,0.07)', color: '#f87171', fontWeight: 600, cursor: 'pointer', fontSize: '0.85rem' }}>↺ Reset</button>
+              </div>
+            </div>
+          </>
+        )}
+
+        {isFinished && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <div style={{ textAlign: 'center', padding: '20px 0', color: '#fbbf24', fontSize: '1.2rem', fontWeight: 700 }}>
+              🏆 Vyhrál {gameState.winner === 1 ? gameState.player1Name : gameState.player2Name}!
+            </div>
+            <button onClick={() => socket?.emit('moderator:nextRound')} style={{ width: '100%', padding: 12, border: 'none', borderRadius: 10, background: 'linear-gradient(135deg, #6366f1, #4338ca)', color: 'white', fontWeight: 700, cursor: 'pointer', fontSize: '0.95rem' }}>
+              ▶ 2. kolo (Písmena)
+            </button>
+            <button onClick={() => socket?.emit('moderator:resetGame')} style={{ width: '100%', padding: 12, borderRadius: 10, border: '1px solid rgba(239,68,68,0.25)', background: 'rgba(239,68,68,0.07)', color: '#f87171', fontWeight: 600, cursor: 'pointer', fontSize: '0.9rem' }}>
+              ↺ Nová hra od začátku
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
