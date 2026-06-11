@@ -3,5 +3,5 @@ builder = "NIXPACKS"
 buildCommand = "npm install && npm run build"
 
 [deploy]
-startCommand = "cd server && node dist/index.js"
+startCommand = "cd server && npm start"
 healthcheckPath = "/api/game"
