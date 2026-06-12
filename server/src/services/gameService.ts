@@ -64,7 +64,7 @@ export async function claimField(player: 1 | 2): Promise<GameState> {
   if (player === 1) p1.push(field)
   else p2.push(field)
 
-  const winner = checkWin(p1, 1) ? 1 : checkWin(p2, 2) ? 2 : null
+  const winner = checkWin(p1) ? 1 : checkWin(p2) ? 2 : null
   const status = winner ? 'FINISHED' : 'PLAYING'
 
   const raw = await prisma.gameState.update({
