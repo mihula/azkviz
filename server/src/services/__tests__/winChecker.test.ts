@@ -49,4 +49,22 @@ describe('checkWin — three-sides rule', () => {
   it('returns false for full middle cluster with no edge contact', () => {
     expect(checkWin([5, 8, 9, 13, 14])).toBe(false)
   })
+
+  it('returns true for interior diagonal path touching all three sides', () => {
+    // path: 2(left)→5→9→14→20→27→28(right+bottom), all connected
+    expect(checkWin([2, 5, 9, 14, 20, 27, 28])).toBe(true)
+  })
+
+  it('returns false for path with gap (not connected across all sides)', () => {
+    // {2}: touches LEFT_EDGE only (not a neighbor of 7)
+    // {7,11,16,22}: left edge chain, touches LEFT_EDGE + BOTTOM_ROW, not RIGHT_EDGE
+    // {28}: touches RIGHT_EDGE + BOTTOM_ROW, not LEFT_EDGE
+    // No single component touches all three sides
+    expect(checkWin([2, 7, 11, 16, 22, 28])).toBe(false)
+  })
+
+  it('returns false for right-edge path without apex (no left contact)', () => {
+    // right edge minus field 1: touches RIGHT_EDGE + BOTTOM_ROW but not LEFT_EDGE
+    expect(checkWin([3, 6, 10, 15, 21, 28])).toBe(false)
+  })
 })
