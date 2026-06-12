@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useGameSocket } from '../hooks/useGameSocket'
 import HexBoard from '../components/HexBoard'
 import PinGate from '../components/PinGate'
@@ -9,6 +9,16 @@ export default function ModeratorPage() {
   const { gameState, socket } = useGameSocket(token ?? undefined)
   const [question, setQuestion] = useState<Question | null>(null)
   const [startForm, setStartForm] = useState({ p1: '', p2: '', round: 'NUMBERS' as Round })
+  const [nextForm, setNextForm] = useState<'NUMBERS' | 'LETTERS' | null>(null)
+  const [nextNames, setNextNames] = useState({ p1: '', p2: '' })
+  const prevStatus = useRef(gameState.status)
+  useEffect(() => {
+    if (prevStatus.current === 'FINISHED' && gameState.status !== 'FINISHED') {
+      setNextForm(null)
+      setNextNames({ p1: '', p2: '' })
+    }
+    prevStatus.current = gameState.status
+  }, [gameState.status])
 
   if (!token) return <PinGate onSuccess={(t) => { localStorage.setItem('mod_token', t); setToken(t) }} />
 
@@ -148,13 +158,56 @@ export default function ModeratorPage() {
 
         {isFinished && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            <div style={{ textAlign: 'center', padding: '20px 0', color: '#fbbf24', fontSize: '1.2rem', fontWeight: 700 }}>
+            <div style={{ textAlign: 'center', padding: '16px 0', color: '#fbbf24', fontSize: '1.2rem', fontWeight: 700 }}>
               🏆 Vyhrál {gameState.winner === 1 ? gameState.player1Name : gameState.player2Name}!
             </div>
-            <button onClick={() => socket?.emit('moderator:nextRound')} style={{ width: '100%', padding: 12, border: 'none', borderRadius: 10, background: 'linear-gradient(135deg, #6366f1, #4338ca)', color: 'white', fontWeight: 700, cursor: 'pointer', fontSize: '0.95rem' }}>
-              ▶ 2. kolo (Písmena)
-            </button>
-            <button onClick={() => socket?.emit('moderator:resetGame')} style={{ width: '100%', padding: 12, borderRadius: 10, border: '1px solid rgba(239,68,68,0.25)', background: 'rgba(239,68,68,0.07)', color: '#f87171', fontWeight: 600, cursor: 'pointer', fontSize: '0.9rem' }}>
+
+            {nextForm === 'NUMBERS' ? (
+              <form onSubmit={(e) => { e.preventDefault(); socket?.emit('moderator:startGame', { player1Name: nextNames.p1, player2Name: nextNames.p2, round: 'NUMBERS' }) }}
+                style={{ display: 'flex', flexDirection: 'column', gap: 8, background: 'rgba(34,197,94,0.06)', border: '1px solid rgba(34,197,94,0.2)', borderRadius: 10, padding: 12 }}>
+                <div style={{ fontSize: '0.65rem', fontWeight: 700, color: '#475569', letterSpacing: '1.5px', textTransform: 'uppercase' }}>Semifinále — Čísla</div>
+                <input value={nextNames.p1} onChange={e => setNextNames(s => ({ ...s, p1: e.target.value }))} placeholder="Jméno týmu 1"
+                  style={{ padding: '8px 12px', borderRadius: 8, border: '1px solid rgba(249,115,22,0.3)', background: 'rgba(249,115,22,0.08)', color: '#f1f5f9', fontSize: '0.9rem', outline: 'none' }} />
+                <input value={nextNames.p2} onChange={e => setNextNames(s => ({ ...s, p2: e.target.value }))} placeholder="Jméno týmu 2"
+                  style={{ padding: '8px 12px', borderRadius: 8, border: '1px solid rgba(34,211,238,0.3)', background: 'rgba(34,211,238,0.08)', color: '#f1f5f9', fontSize: '0.9rem', outline: 'none' }} />
+                <div style={{ display: 'flex', gap: 8 }}>
+                  <button type="button" onClick={() => setNextForm(null)}
+                    style={{ flex: 1, padding: 10, borderRadius: 8, border: '1px solid rgba(255,255,255,0.1)', background: 'transparent', color: '#64748b', cursor: 'pointer', fontSize: '0.85rem' }}>Zrušit</button>
+                  <button type="submit"
+                    style={{ flex: 2, padding: 10, borderRadius: 8, border: 'none', background: 'linear-gradient(135deg, #22c55e, #15803d)', color: 'white', fontWeight: 700, cursor: 'pointer', fontSize: '0.9rem' }}>▶ Spustit</button>
+                </div>
+              </form>
+            ) : (
+              <button onClick={() => { setNextForm('NUMBERS'); setNextNames({ p1: '', p2: '' }) }}
+                style={{ width: '100%', padding: 12, border: 'none', borderRadius: 10, background: 'linear-gradient(135deg, #22c55e, #15803d)', color: 'white', fontWeight: 700, cursor: 'pointer', fontSize: '0.95rem' }}>
+                ▶ Další semifinále (Čísla)
+              </button>
+            )}
+
+            {nextForm === 'LETTERS' ? (
+              <form onSubmit={(e) => { e.preventDefault(); socket?.emit('moderator:startGame', { player1Name: nextNames.p1, player2Name: nextNames.p2, round: 'LETTERS' }) }}
+                style={{ display: 'flex', flexDirection: 'column', gap: 8, background: 'rgba(99,102,241,0.06)', border: '1px solid rgba(99,102,241,0.2)', borderRadius: 10, padding: 12 }}>
+                <div style={{ fontSize: '0.65rem', fontWeight: 700, color: '#475569', letterSpacing: '1.5px', textTransform: 'uppercase' }}>Finále — Písmena</div>
+                <input value={nextNames.p1} onChange={e => setNextNames(s => ({ ...s, p1: e.target.value }))} placeholder="Jméno finalisty 1"
+                  style={{ padding: '8px 12px', borderRadius: 8, border: '1px solid rgba(249,115,22,0.3)', background: 'rgba(249,115,22,0.08)', color: '#f1f5f9', fontSize: '0.9rem', outline: 'none' }} />
+                <input value={nextNames.p2} onChange={e => setNextNames(s => ({ ...s, p2: e.target.value }))} placeholder="Jméno finalisty 2"
+                  style={{ padding: '8px 12px', borderRadius: 8, border: '1px solid rgba(34,211,238,0.3)', background: 'rgba(34,211,238,0.08)', color: '#f1f5f9', fontSize: '0.9rem', outline: 'none' }} />
+                <div style={{ display: 'flex', gap: 8 }}>
+                  <button type="button" onClick={() => setNextForm(null)}
+                    style={{ flex: 1, padding: 10, borderRadius: 8, border: '1px solid rgba(255,255,255,0.1)', background: 'transparent', color: '#64748b', cursor: 'pointer', fontSize: '0.85rem' }}>Zrušit</button>
+                  <button type="submit"
+                    style={{ flex: 2, padding: 10, borderRadius: 8, border: 'none', background: 'linear-gradient(135deg, #6366f1, #4338ca)', color: 'white', fontWeight: 700, cursor: 'pointer', fontSize: '0.9rem' }}>🏆 Spustit finále</button>
+                </div>
+              </form>
+            ) : (
+              <button onClick={() => { setNextForm('LETTERS'); setNextNames({ p1: '', p2: '' }) }}
+                style={{ width: '100%', padding: 12, border: 'none', borderRadius: 10, background: 'linear-gradient(135deg, #6366f1, #4338ca)', color: 'white', fontWeight: 700, cursor: 'pointer', fontSize: '0.95rem' }}>
+                🏆 Finále (Písmena)
+              </button>
+            )}
+
+            <button onClick={() => socket?.emit('moderator:resetGame')}
+              style={{ width: '100%', padding: 12, borderRadius: 10, border: '1px solid rgba(239,68,68,0.25)', background: 'rgba(239,68,68,0.07)', color: '#f87171', fontWeight: 600, cursor: 'pointer', fontSize: '0.9rem' }}>
               ↺ Nová hra od začátku
             </button>
           </div>
