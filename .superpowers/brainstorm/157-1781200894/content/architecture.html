@@ -1,0 +1,45 @@
+<h2>Jak strukturovat aplikaci?</h2>
+<p class="subtitle">Vyber architektonický přístup pro AZKvíz</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>React SPA + Express (jeden server)</h3>
+      <p>Vite/React frontend, Express + Socket.io backend — vše na jednom serveru. React build je servován přímo z Express. Jedno nasazení (Railway / Fly.io / Render).</p>
+      <div class="pros-cons">
+        <div class="pros"><h4>Výhody</h4><ul><li>Jedno nasazení, žádné CORS</li><li>WebSocket funguje perfektně</li><li>Jednoduché na pochopení</li></ul></div>
+        <div class="cons"><h4>Nevýhody</h4><ul><li>Build pipeline nastavit ručně</li><li>Frontend a backend v jednom repo</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Next.js full-stack (monorepo)</h3>
+      <p>Next.js obsluhuje frontend i API. Custom server pro WebSocket (nebo Pusher/Ably jako hosted WS). Nasazení na Vercel nebo Railway.</p>
+      <div class="pros-cons">
+        <div class="pros"><h4>Výhody</h4><ul><li>SSR pro public view (SEO, rychlost)</li><li>Jeden framework, jedno repo</li><li>Snadné nasazení na Vercel</li></ul></div>
+        <div class="cons"><h4>Nevýhody</h4><ul><li>Custom server komplikuje serverless nasazení</li><li>Více magie, těžší ladit WS</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>React SPA + Express (oddělené nasazení)</h3>
+      <p>React na Netlify/Vercel (static), Express backend samostatně na Railway. Komunikují přes HTTPS + WSS.</p>
+      <div class="pros-cons">
+        <div class="pros"><h4>Výhody</h4><ul><li>Nezávislý deploy frontendu/backendu</li><li>Frontend CDN = rychlé načítání</li></ul></div>
+        <div class="cons"><h4>Nevýhody</h4><ul><li>Dvě nasazení, CORS konfigurace</li><li>Složitější CI/CD</li></ul></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="margin-top: 24px; padding: 16px; background: rgba(99,102,241,0.1); border-radius: 8px; border-left: 3px solid #6366f1;">
+  <span class="label">Doporučení</span>
+  <p style="margin: 8px 0 0 0;">Doporučuji <strong>možnost A</strong> — React + Express na jednom serveru. Je nejjednodušší na implementaci a nasazení, WebSocket funguje bez kompromisů a pro tento typ aplikace není SSR (Next.js) potřeba.</p>
+</div>
