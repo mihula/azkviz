@@ -20,7 +20,6 @@ import {
   claimField,
   skipField,
   resetGame,
-  nextRound,
 } from '../gameService'
 
 const mockDbState = {

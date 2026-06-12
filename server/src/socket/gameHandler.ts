@@ -7,7 +7,6 @@ import {
   claimField,
   skipField,
   resetGame,
-  nextRound,
 } from '../services/gameService'
 import jwt from 'jsonwebtoken'
 
@@ -66,8 +65,4 @@ export function registerGameHandlers(io: TypedServer, socket: TypedSocket) {
     await broadcast(io)
   })
 
-  socket.on('moderator:nextRound', async () => {
-    await nextRound()
-    await broadcast(io)
-  })
 }

@@ -166,9 +166,9 @@ export default function ModeratorPage() {
               <form onSubmit={(e) => { e.preventDefault(); socket?.emit('moderator:startGame', { player1Name: nextNames.p1, player2Name: nextNames.p2, round: 'NUMBERS' }) }}
                 style={{ display: 'flex', flexDirection: 'column', gap: 8, background: 'rgba(34,197,94,0.06)', border: '1px solid rgba(34,197,94,0.2)', borderRadius: 10, padding: 12 }}>
                 <div style={{ fontSize: '0.65rem', fontWeight: 700, color: '#475569', letterSpacing: '1.5px', textTransform: 'uppercase' }}>Semifinále — Čísla</div>
-                <input value={nextNames.p1} onChange={e => setNextNames(s => ({ ...s, p1: e.target.value }))} placeholder="Jméno týmu 1"
+                <input value={nextNames.p1} onChange={e => setNextNames(s => ({ ...s, p1: e.target.value }))} placeholder="Jméno týmu 1" required
                   style={{ padding: '8px 12px', borderRadius: 8, border: '1px solid rgba(249,115,22,0.3)', background: 'rgba(249,115,22,0.08)', color: '#f1f5f9', fontSize: '0.9rem', outline: 'none' }} />
-                <input value={nextNames.p2} onChange={e => setNextNames(s => ({ ...s, p2: e.target.value }))} placeholder="Jméno týmu 2"
+                <input value={nextNames.p2} onChange={e => setNextNames(s => ({ ...s, p2: e.target.value }))} placeholder="Jméno týmu 2" required
                   style={{ padding: '8px 12px', borderRadius: 8, border: '1px solid rgba(34,211,238,0.3)', background: 'rgba(34,211,238,0.08)', color: '#f1f5f9', fontSize: '0.9rem', outline: 'none' }} />
                 <div style={{ display: 'flex', gap: 8 }}>
                   <button type="button" onClick={() => setNextForm(null)}
@@ -188,9 +188,9 @@ export default function ModeratorPage() {
               <form onSubmit={(e) => { e.preventDefault(); socket?.emit('moderator:startGame', { player1Name: nextNames.p1, player2Name: nextNames.p2, round: 'LETTERS' }) }}
                 style={{ display: 'flex', flexDirection: 'column', gap: 8, background: 'rgba(99,102,241,0.06)', border: '1px solid rgba(99,102,241,0.2)', borderRadius: 10, padding: 12 }}>
                 <div style={{ fontSize: '0.65rem', fontWeight: 700, color: '#475569', letterSpacing: '1.5px', textTransform: 'uppercase' }}>Finále — Písmena</div>
-                <input value={nextNames.p1} onChange={e => setNextNames(s => ({ ...s, p1: e.target.value }))} placeholder="Jméno finalisty 1"
+                <input value={nextNames.p1} onChange={e => setNextNames(s => ({ ...s, p1: e.target.value }))} placeholder="Jméno finalisty 1" required
                   style={{ padding: '8px 12px', borderRadius: 8, border: '1px solid rgba(249,115,22,0.3)', background: 'rgba(249,115,22,0.08)', color: '#f1f5f9', fontSize: '0.9rem', outline: 'none' }} />
-                <input value={nextNames.p2} onChange={e => setNextNames(s => ({ ...s, p2: e.target.value }))} placeholder="Jméno finalisty 2"
+                <input value={nextNames.p2} onChange={e => setNextNames(s => ({ ...s, p2: e.target.value }))} placeholder="Jméno finalisty 2" required
                   style={{ padding: '8px 12px', borderRadius: 8, border: '1px solid rgba(34,211,238,0.3)', background: 'rgba(34,211,238,0.08)', color: '#f1f5f9', fontSize: '0.9rem', outline: 'none' }} />
                 <div style={{ display: 'flex', gap: 8 }}>
                   <button type="button" onClick={() => setNextForm(null)}

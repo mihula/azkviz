@@ -103,20 +103,3 @@ export async function resetGame(): Promise<GameState> {
   })
   return parseState(raw)
 }
-
-export async function nextRound(): Promise<GameState> {
-  const current = await prisma.gameState.findUnique({ where: { id: 1 } })
-  if (!current) throw new Error('GameState not initialized')
-  const raw = await prisma.gameState.update({
-    where: { id: 1 },
-    data: {
-      status: 'PLAYING',
-      round: 'LETTERS',
-      activeField: null,
-      claimedP1: '[]',
-      claimedP2: '[]',
-      winner: null,
-    },
-  })
-  return parseState(raw)
-}

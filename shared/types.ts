@@ -42,7 +42,6 @@ export interface ClientToServerEvents {
   'moderator:skipField': () => void
   'moderator:startGame': (data: { player1Name: string; player2Name: string; round: Round }) => void
   'moderator:resetGame': () => void
-  'moderator:nextRound': () => void
 }
 
 export interface AuthResponse {
