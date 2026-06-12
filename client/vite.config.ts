@@ -5,6 +5,7 @@ import path from 'path'
 export default defineConfig({
   plugins: [react()],
   resolve: {
+    preserveSymlinks: true,
     alias: {
       'azkivz-shared': path.resolve(__dirname, '../shared/types.ts'),
     },

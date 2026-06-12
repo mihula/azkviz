@@ -6,3 +6,4 @@ dist/
 shared/dist/
 client/dist/
 server/dist/
+release/
