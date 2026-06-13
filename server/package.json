@@ -8,8 +8,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "db:generate": "prisma generate",
-    "db:migrate": "prisma migrate dev",
-    "db:push": "prisma db push"
+    "db:migrate": "prisma migrate dev --schema ./prisma/schema.dev.prisma",
+    "db:push": "prisma db push --schema ./prisma/schema.dev.prisma"
   },
   "dependencies": {
     "@prisma/client": "^5.14.0",
