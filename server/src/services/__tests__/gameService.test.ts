@@ -45,11 +45,12 @@ const mockDbState = {
 beforeEach(() => {
   vi.clearAllMocks()
   vi.mocked(prisma.gameState.findUnique).mockResolvedValue(mockDbState as any)
-  vi.mocked(prisma.gameState.update).mockImplementation(async ({ data }) => ({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  vi.mocked(prisma.gameState.update).mockImplementation((async ({ data }: any) => ({
     ...mockDbState,
     ...data,
     updatedAt: new Date(),
-  }) as any)
+  })) as any)
 })
 
 describe('getGameState', () => {

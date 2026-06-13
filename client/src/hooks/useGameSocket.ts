@@ -15,6 +15,10 @@ const INITIAL_STATE: GameState = {
   claimedP2: [],
   winner: null,
   updatedAt: new Date().toISOString(),
+  activePlayer: null,
+  unansweredFields: [],
+  activeQuestionType: null,
+  timerStartedAt: null,
 }
 
 export function useGameSocket(token?: string) {
