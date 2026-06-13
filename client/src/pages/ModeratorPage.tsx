@@ -121,6 +121,8 @@ export default function ModeratorPage() {
 
   function handleFieldClick(fieldNumber: number) {
     socket?.emit('moderator:selectField', { fieldNumber })
+    const isClaimed = gameState.claimedP1.includes(fieldNumber) || gameState.claimedP2.includes(fieldNumber)
+    if (!isClaimed) socket?.emit('moderator:startTimer')
     const isYesNo = gameState.unansweredFields.includes(fieldNumber)
     if (isYesNo) loadYesNoQuestion()
     else loadQuestion(fieldNumber)
@@ -262,16 +264,8 @@ export default function ModeratorPage() {
               )
               return (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <div style={{ fontSize: '0.65rem', fontWeight: 700, color: '#475569', letterSpacing: '1.5px', textTransform: 'uppercase' }}>
-                  {gameState.activeQuestionType === 'yesno' ? 'Ano / Ne otázka' : 'Přiřadit pole'}
-                </div>
-                <button
-                  disabled={!gameState.activeField || !!gameState.timerStartedAt}
-                  onClick={() => socket?.emit('moderator:startTimer')}
-                  style={{ padding: '4px 10px', borderRadius: 6, border: '1px solid rgba(251,191,36,0.3)', background: gameState.timerStartedAt ? 'rgba(251,191,36,0.15)' : 'rgba(251,191,36,0.06)', color: gameState.timerStartedAt ? '#fbbf24' : '#78716c', cursor: gameState.activeField && !gameState.timerStartedAt ? 'pointer' : 'default', fontSize: '0.75rem', fontWeight: 600, opacity: gameState.activeField ? 1 : 0.4 }}>
-                  {gameState.timerStartedAt ? '⏱ Běží' : '▶ Timer'}
-                </button>
+              <div style={{ fontSize: '0.65rem', fontWeight: 700, color: '#475569', letterSpacing: '1.5px', textTransform: 'uppercase' }}>
+                {gameState.activeQuestionType === 'yesno' ? 'Ano / Ne otázka' : 'Přiřadit pole'}
               </div>
 
               {gameState.activeQuestionType === 'yesno' ? (

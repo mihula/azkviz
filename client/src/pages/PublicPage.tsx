@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useGameSocket } from '../hooks/useGameSocket'
 import HexBoard from '../components/HexBoard'
 
-const TIMER_SECONDS = 30
+const TIMER_SECONDS = 10
 
 function useCountdown(timerStartedAt: string | null): number | null {
   const [remaining, setRemaining] = useState<number | null>(null)
@@ -22,6 +22,26 @@ function useCountdown(timerStartedAt: string | null): number | null {
   }, [timerStartedAt])
 
   return remaining
+}
+
+function TimerHex({ remaining, player }: { remaining: number; player: 1 | 2 }) {
+  const emptyPct = (1 - remaining / TIMER_SECONDS) * 100
+  const filled = player === 1 ? '#f97316' : '#22d3ee'
+  const empty = player === 1 ? '#fed7aa' : '#cffafe'
+  const textColor = player === 1 ? '#431407' : '#042f2e'
+  const seconds = Math.ceil(remaining)
+  return (
+    <div style={{
+      width: 100, height: 115,
+      clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)',
+      background: `conic-gradient(from -90deg, ${empty} 0% ${emptyPct}%, ${filled} ${emptyPct}% 100%)`,
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+    }}>
+      <span style={{ fontSize: '2.8rem', fontWeight: 900, color: textColor, lineHeight: 1, userSelect: 'none' }}>
+        {seconds}
+      </span>
+    </div>
+  )
 }
 
 export default function PublicPage() {
@@ -55,19 +75,7 @@ export default function PublicPage() {
             )}
           </div>
         )}
-        {countdown !== null && (
-          <div style={{
-            display: 'flex', alignItems: 'center', gap: 8,
-            background: countdown < 5 ? 'rgba(239,68,68,0.15)' : 'rgba(251,191,36,0.1)',
-            border: `1px solid ${countdown < 5 ? 'rgba(239,68,68,0.35)' : 'rgba(251,191,36,0.25)'}`,
-            borderRadius: 24, padding: '6px 18px',
-            fontSize: '1.2rem', fontWeight: 800,
-            color: countdown < 5 ? '#f87171' : '#fbbf24',
-            fontVariantNumeric: 'tabular-nums',
-          }}>
-            ⏱ {Math.ceil(countdown)}
-          </div>
-        )}
+        <div style={{ width: 56 }} />
       </div>
 
       {/* Board */}
@@ -85,7 +93,19 @@ export default function PublicPage() {
             </div>
           </div>
         ) : (
-          <HexBoard gameState={gameState} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
+            <div style={{ width: 100, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              {countdown !== null && gameState.activePlayer === 1 && (
+                <TimerHex remaining={countdown} player={1} />
+              )}
+            </div>
+            <HexBoard gameState={gameState} />
+            <div style={{ width: 100, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              {countdown !== null && gameState.activePlayer === 2 && (
+                <TimerHex remaining={countdown} player={2} />
+              )}
+            </div>
+          </div>
         )}
       </div>
 
