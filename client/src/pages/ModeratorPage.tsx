@@ -4,6 +4,40 @@ import HexBoard from '../components/HexBoard'
 import PinGate from '../components/PinGate'
 import { Question, Round } from 'azkivz-shared'
 
+function CorrectionButtons({ fieldNumber, owner, player1Name, player2Name, onCorrect }: {
+  fieldNumber: number
+  owner: 'p1' | 'p2'
+  player1Name: string
+  player2Name: string
+  onCorrect: (action: 'free' | 'p1' | 'p2' | 'unanswered') => void
+}) {
+  const ownerName = owner === 'p1' ? (player1Name || 'Hráč 1') : (player2Name || 'Hráč 2')
+  const ownerColor = owner === 'p1' ? '#f97316' : '#22d3ee'
+  return (
+    <>
+      <div style={{ fontSize: '0.75rem', color: '#94a3b8', textAlign: 'center', padding: '4px 0' }}>
+        Pole {fieldNumber} vlastní <span style={{ color: ownerColor, fontWeight: 700 }}>{ownerName}</span>
+      </div>
+      <button onClick={() => onCorrect('free')}
+        style={{ width: '100%', padding: 10, borderRadius: 10, border: '1px solid rgba(255,255,255,0.15)', background: 'rgba(255,255,255,0.06)', color: '#cbd5e1', fontWeight: 600, cursor: 'pointer', fontSize: '0.85rem' }}>
+        ○ Uvolnit — nikdo nevlastní
+      </button>
+      <button onClick={() => onCorrect('p1')}
+        style={{ width: '100%', padding: 10, border: 'none', borderRadius: 10, background: 'linear-gradient(135deg, #f97316, #c2410c)', color: 'white', fontWeight: 700, cursor: 'pointer', fontSize: '0.85rem' }}>
+        🟠 Přiřadit {player1Name || 'Hráči 1'}
+      </button>
+      <button onClick={() => onCorrect('p2')}
+        style={{ width: '100%', padding: 10, border: 'none', borderRadius: 10, background: 'linear-gradient(135deg, #22d3ee, #0e7490)', color: '#042f2e', fontWeight: 700, cursor: 'pointer', fontSize: '0.85rem' }}>
+        🔵 Přiřadit {player2Name || 'Hráči 2'}
+      </button>
+      <button onClick={() => onCorrect('unanswered')}
+        style={{ width: '100%', padding: 10, borderRadius: 10, border: '1px solid rgba(245,158,11,0.3)', background: 'rgba(245,158,11,0.07)', color: '#fbbf24', fontWeight: 600, cursor: 'pointer', fontSize: '0.85rem' }}>
+        ◈ Nastavit jako neuhodnuté
+      </button>
+    </>
+  )
+}
+
 function OfferPhaseButtons({ activePlayer, player1Name, player2Name, onSteal, onStealFailed, onMarkUnanswered }: {
   activePlayer: 1 | 2
   player1Name: string
@@ -203,6 +237,30 @@ export default function ModeratorPage() {
             )}
 
             {/* Action buttons */}
+            {(() => {
+              const af = gameState.activeField
+              const claimedOwner = af
+                ? gameState.claimedP1.includes(af) ? 'p1' as const
+                : gameState.claimedP2.includes(af) ? 'p2' as const
+                : null
+                : null
+              if (claimedOwner && af) return (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  <div style={{ fontSize: '0.65rem', fontWeight: 700, color: '#f59e0b', letterSpacing: '1.5px', textTransform: 'uppercase' }}>Opravit</div>
+                  <CorrectionButtons
+                    fieldNumber={af}
+                    owner={claimedOwner}
+                    player1Name={gameState.player1Name}
+                    player2Name={gameState.player2Name}
+                    onCorrect={(action) => { socket?.emit('moderator:correctField', { action }); setQuestion(null); setOfferPhase(false) }}
+                  />
+                  <div style={{ display: 'flex', gap: 8 }}>
+                    <button onClick={handleSkip} style={{ flex: 1, padding: 10, borderRadius: 10, border: '1px solid rgba(255,255,255,0.12)', background: 'rgba(255,255,255,0.05)', color: '#94a3b8', fontWeight: 600, cursor: 'pointer', fontSize: '0.85rem' }}>⏭ Zavřít</button>
+                    <button onClick={() => socket?.emit('moderator:resetGame')} style={{ flex: 1, padding: 10, borderRadius: 10, border: '1px solid rgba(239,68,68,0.25)', background: 'rgba(239,68,68,0.07)', color: '#f87171', fontWeight: 600, cursor: 'pointer', fontSize: '0.85rem' }}>↺ Reset</button>
+                  </div>
+                </div>
+              )
+              return (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <div style={{ fontSize: '0.65rem', fontWeight: 700, color: '#475569', letterSpacing: '1.5px', textTransform: 'uppercase' }}>
@@ -265,6 +323,8 @@ export default function ModeratorPage() {
                 <button onClick={() => socket?.emit('moderator:resetGame')} style={{ flex: 1, padding: 10, borderRadius: 10, border: '1px solid rgba(239,68,68,0.25)', background: 'rgba(239,68,68,0.07)', color: '#f87171', fontWeight: 600, cursor: 'pointer', fontSize: '0.85rem' }}>↺ Reset</button>
               </div>
             </div>
+              )
+            })()}
           </>
         )}
 

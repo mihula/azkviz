@@ -244,6 +244,41 @@ export async function resolveYesNo(correct: boolean): Promise<GameState> {
   return parseState(raw)
 }
 
+export async function correctField(action: 'free' | 'p1' | 'p2' | 'unanswered'): Promise<GameState> {
+  const current = await prisma.gameState.findUnique({ where: { id: 1 } })
+  if (!current) throw new Error('GameState not initialized')
+  if (!current.activeField) throw new Error('No active field')
+
+  const field = current.activeField
+  let p1 = (JSON.parse(current.claimedP1) as number[]).filter(f => f !== field)
+  let p2 = (JSON.parse(current.claimedP2) as number[]).filter(f => f !== field)
+  let unanswered = (JSON.parse(current.unansweredFields || '[]') as number[]).filter(f => f !== field)
+
+  if (action === 'p1') p1.push(field)
+  else if (action === 'p2') p2.push(field)
+  else if (action === 'unanswered') unanswered.push(field)
+
+  const winner = checkWin(p1) ? 1 : checkWin(p2) ? 2 : null
+  const status = winner ? 'FINISHED' : 'PLAYING'
+
+  const raw = await prisma.gameState.update({
+    where: { id: 1 },
+    data: {
+      claimedP1: JSON.stringify(p1),
+      claimedP2: JSON.stringify(p2),
+      unansweredFields: JSON.stringify(unanswered),
+      activeField: null,
+      winner,
+      status,
+      activePlayer: winner ? null : current.activePlayer,
+      activeQuestionType: null,
+      timerStartedAt: null,
+      activeFieldHint: null,
+    },
+  })
+  return parseState(raw)
+}
+
 export async function skipField(): Promise<GameState> {
   const current = await prisma.gameState.findUnique({ where: { id: 1 } })
   if (!current) throw new Error('GameState not initialized')

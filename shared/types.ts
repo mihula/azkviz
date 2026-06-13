@@ -62,6 +62,7 @@ export interface ClientToServerEvents {
   'moderator:stealField': (data: { player: 1 | 2 }) => void
   'moderator:markUnanswered': () => void
   'moderator:stealFailed': () => void
+  'moderator:correctField': (data: { action: 'free' | 'p1' | 'p2' | 'unanswered' }) => void
   'moderator:resolveYesNo': (data: { correct: boolean }) => void
 }
 

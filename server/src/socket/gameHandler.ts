@@ -8,6 +8,7 @@ import {
   stealField,
   stealFailed,
   markUnanswered,
+  correctField,
   resolveYesNo,
   startTimer,
   skipField,
@@ -68,6 +69,11 @@ export function registerGameHandlers(io: TypedServer, socket: TypedSocket) {
 
   socket.on('moderator:stealFailed', async () => {
     await stealFailed()
+    await broadcast(io)
+  })
+
+  socket.on('moderator:correctField', async ({ action }) => {
+    await correctField(action)
     await broadcast(io)
   })
 
