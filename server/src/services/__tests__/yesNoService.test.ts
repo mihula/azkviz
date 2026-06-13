@@ -6,6 +6,7 @@ vi.mock('../../lib/prisma', () => ({
       findMany: vi.fn(),
       count: vi.fn(),
       create: vi.fn(),
+      createMany: vi.fn(),
       update: vi.fn(),
       delete: vi.fn(),
     },
@@ -79,13 +80,11 @@ describe('deleteYesNoQuestion', () => {
 })
 
 describe('importYesNoQuestions', () => {
-  it('creates each item and returns count', async () => {
-    vi.mocked(prisma.yesNoQuestion.create).mockResolvedValue(mockQ as any)
-    const count = await importYesNoQuestions([
-      { text: 'Q1', answer: 'Ano' },
-      { text: 'Q2', answer: 'Ne' },
-    ])
+  it('bulk creates items and returns count', async () => {
+    vi.mocked(prisma.yesNoQuestion.createMany).mockResolvedValue({ count: 2 } as any)
+    const items = [{ text: 'Q1', answer: 'Ano' }, { text: 'Q2', answer: 'Ne' }]
+    const count = await importYesNoQuestions(items)
     expect(count).toBe(2)
-    expect(prisma.yesNoQuestion.create).toHaveBeenCalledTimes(2)
+    expect(prisma.yesNoQuestion.createMany).toHaveBeenCalledWith({ data: items })
   })
 })

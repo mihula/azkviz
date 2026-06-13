@@ -33,10 +33,6 @@ export async function deleteYesNoQuestion(id: number): Promise<void> {
 }
 
 export async function importYesNoQuestions(items: YesNoQuestionInput[]): Promise<number> {
-  let count = 0
-  for (const item of items) {
-    await prisma.yesNoQuestion.create({ data: item })
-    count++
-  }
-  return count
+  const result = await prisma.yesNoQuestion.createMany({ data: items })
+  return result.count
 }
