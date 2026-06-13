@@ -14,6 +14,10 @@ export interface GameState {
   claimedP2: number[]
   winner: number | null
   updatedAt: string
+  activePlayer: 1 | 2 | null
+  unansweredFields: number[]
+  activeQuestionType: 'normal' | 'yesno' | null
+  timerStartedAt: string | null
 }
 
 export interface Question {
@@ -31,6 +35,17 @@ export interface QuestionInput {
   answer: string
 }
 
+export interface YesNoQuestion {
+  id: number
+  text: string
+  answer: string  // "Ano" | "Ne"
+}
+
+export interface YesNoQuestionInput {
+  text: string
+  answer: string
+}
+
 // Socket.io typed events
 export interface ServerToClientEvents {
   'game:update': (state: GameState) => void
@@ -42,6 +57,10 @@ export interface ClientToServerEvents {
   'moderator:skipField': () => void
   'moderator:startGame': (data: { player1Name: string; player2Name: string; round: Round }) => void
   'moderator:resetGame': () => void
+  'moderator:startTimer': () => void
+  'moderator:stealField': (data: { player: 1 | 2 }) => void
+  'moderator:markUnanswered': () => void
+  'moderator:resolveYesNo': (data: { correct: boolean }) => void
 }
 
 export interface AuthResponse {
