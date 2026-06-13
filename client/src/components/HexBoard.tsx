@@ -9,16 +9,16 @@ interface HexBoardProps {
 }
 
 function calcHexSize(compact: boolean) {
-  if (compact) return { hexW: 52, hexH: 60, gap: 3 }
-  if (typeof window === 'undefined') return { hexW: 52, hexH: 60, gap: 3 }
+  if (compact) return { hexW: 52, hexH: 60, gap: 3, fontSize: 20 }
+  if (typeof window === 'undefined') return { hexW: 52, hexH: 60, gap: 3, fontSize: 20 }
   const GAP = 5
   const nonBoardH = 168
   const availH = window.innerHeight - nonBoardH
-  const availW = window.innerWidth - 24
+  const availW = window.innerWidth - 248  // subtract timer hex placeholders (2 × 100 + gaps)
   const hexHfromH = availH / 5.5
   const hexHfromW = (availW - 6 * GAP) / (7 * 0.866)
   const hexH = Math.floor(Math.min(hexHfromH, hexHfromW))
-  return { hexW: Math.floor(hexH * 0.866), hexH, gap: GAP }
+  return { hexW: Math.floor(hexH * 0.866), hexH, gap: GAP, fontSize: Math.floor(hexH * 0.44) }
 }
 
 export default function HexBoard({ gameState, onFieldClick, compact = false }: HexBoardProps) {
@@ -31,7 +31,7 @@ export default function HexBoard({ gameState, onFieldClick, compact = false }: H
     return () => window.removeEventListener('resize', handle)
   }, [compact])
 
-  const { hexW, hexH, gap } = size
+  const { hexW, hexH, gap, fontSize } = size
   const overlap = Math.floor(hexH * 0.25)
 
   const rows: number[][] = []
@@ -68,7 +68,7 @@ export default function HexBoard({ gameState, onFieldClick, compact = false }: H
               round={gameState.round}
               state={cellState(f)}
               onClick={onFieldClick}
-              style={{ width: hexW, height: hexH }}
+              style={{ width: hexW, height: hexH, fontSize }}
             />
           ))}
         </div>
