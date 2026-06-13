@@ -5,13 +5,14 @@ import {
   startGame,
   selectField,
   claimField,
+  stealField,
+  markUnanswered,
+  resolveYesNo,
+  startTimer,
   skipField,
   resetGame,
 } from '../services/gameService'
 import jwt from 'jsonwebtoken'
-
-// Questions are intentionally NOT sent via socket — answers must not reach public clients.
-// The moderator client fetches questions via REST GET /api/questions/field after selectField.
 
 type TypedServer = Server<ClientToServerEvents, ServerToClientEvents>
 type TypedSocket = Socket<ClientToServerEvents, ServerToClientEvents>
@@ -35,10 +36,9 @@ async function broadcast(io: TypedServer) {
 export function registerGameHandlers(io: TypedServer, socket: TypedSocket) {
   const isMod = isModeratorSocket(socket)
 
-  // Send current state to newly connected client
   getGameState().then((state) => socket.emit('game:update', state))
 
-  if (!isMod) return // public clients are read-only
+  if (!isMod) return
 
   socket.on('moderator:startGame', async ({ player1Name, player2Name, round }) => {
     await startGame(player1Name, player2Name, round)
@@ -55,6 +55,26 @@ export function registerGameHandlers(io: TypedServer, socket: TypedSocket) {
     await broadcast(io)
   })
 
+  socket.on('moderator:stealField', async ({ player }) => {
+    await stealField(player)
+    await broadcast(io)
+  })
+
+  socket.on('moderator:markUnanswered', async () => {
+    await markUnanswered()
+    await broadcast(io)
+  })
+
+  socket.on('moderator:resolveYesNo', async ({ correct }) => {
+    await resolveYesNo(correct)
+    await broadcast(io)
+  })
+
+  socket.on('moderator:startTimer', async () => {
+    await startTimer()
+    await broadcast(io)
+  })
+
   socket.on('moderator:skipField', async () => {
     await skipField()
     await broadcast(io)
@@ -64,5 +84,4 @@ export function registerGameHandlers(io: TypedServer, socket: TypedSocket) {
     await resetGame()
     await broadcast(io)
   })
-
 }
