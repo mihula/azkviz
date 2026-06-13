@@ -4,15 +4,17 @@ import HexBoard from '../components/HexBoard'
 import PinGate from '../components/PinGate'
 import { Question, Round } from 'azkivz-shared'
 
-function OfferPhaseButtons({ activePlayer, player1Name, player2Name, onSteal, onMarkUnanswered }: {
+function OfferPhaseButtons({ activePlayer, player1Name, player2Name, onSteal, onStealFailed, onMarkUnanswered }: {
   activePlayer: 1 | 2
   player1Name: string
   player2Name: string
   onSteal: (player: 1 | 2) => void
+  onStealFailed: () => void
   onMarkUnanswered: () => void
 }) {
   const opponentPlayer = activePlayer === 1 ? 2 : 1
   const opponentName = opponentPlayer === 1 ? (player1Name || 'Hráč 1') : (player2Name || 'Hráč 2')
+  const activeName = activePlayer === 1 ? (player1Name || 'Hráč 1') : (player2Name || 'Hráč 2')
   const opponentBg = opponentPlayer === 1
     ? 'linear-gradient(135deg, #f97316, #c2410c)'
     : 'linear-gradient(135deg, #22d3ee, #0e7490)'
@@ -26,12 +28,17 @@ function OfferPhaseButtons({ activePlayer, player1Name, player2Name, onSteal, on
       <button
         onClick={() => onSteal(opponentPlayer)}
         style={{ width: '100%', padding: 12, border: 'none', borderRadius: 10, background: opponentBg, color: opponentColor, fontWeight: 700, cursor: 'pointer', fontSize: '0.9rem' }}>
-        {opponentEmoji} {opponentName} odpověděl správně
+        {opponentEmoji} {opponentName} odpověděl správně → hraje {activeName}
+      </button>
+      <button
+        onClick={onStealFailed}
+        style={{ width: '100%', padding: 12, borderRadius: 10, border: '1px solid rgba(239,68,68,0.25)', background: 'rgba(239,68,68,0.07)', color: '#f87171', fontWeight: 600, cursor: 'pointer', fontSize: '0.9rem' }}>
+        ✗ {opponentName} odpověděl špatně → hraje {activeName}
       </button>
       <button
         onClick={onMarkUnanswered}
         style={{ width: '100%', padding: 12, borderRadius: 10, border: '1px solid rgba(245,158,11,0.3)', background: 'rgba(245,158,11,0.07)', color: '#fbbf24', fontWeight: 600, cursor: 'pointer', fontSize: '0.9rem' }}>
-        ✗ Nikdo neuhodl
+        ↩ {opponentName} nechce odpovídat → hraje {opponentName}
       </button>
     </>
   )
@@ -232,6 +239,7 @@ export default function ModeratorPage() {
                   player1Name={gameState.player1Name}
                   player2Name={gameState.player2Name}
                   onSteal={(player) => { socket?.emit('moderator:stealField', { player }); setQuestion(null); setOfferPhase(false) }}
+                  onStealFailed={() => { socket?.emit('moderator:stealFailed'); setQuestion(null); setOfferPhase(false) }}
                   onMarkUnanswered={() => { socket?.emit('moderator:markUnanswered'); setQuestion(null); setOfferPhase(false) }}
                 />
               ) : (

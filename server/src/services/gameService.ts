@@ -175,7 +175,30 @@ export async function markUnanswered(): Promise<GameState> {
     data: {
       activeField: null,
       unansweredFields: JSON.stringify(unanswered),
-      activePlayer: flipPlayer(current.activePlayer as 1 | 2),
+      activePlayer: flipPlayer(current.activePlayer as 1 | 2), // B declined → B plays next
+      activeQuestionType: null,
+      timerStartedAt: null,
+      activeFieldHint: null,
+    },
+  })
+  return parseState(raw)
+}
+
+export async function stealFailed(): Promise<GameState> {
+  const current = await prisma.gameState.findUnique({ where: { id: 1 } })
+  if (!current) throw new Error('GameState not initialized')
+  if (!current.activeField) throw new Error('No active field')
+
+  const field = current.activeField
+  const unanswered = JSON.parse(current.unansweredFields || '[]') as number[]
+  if (!unanswered.includes(field)) unanswered.push(field)
+
+  const raw = await prisma.gameState.update({
+    where: { id: 1 },
+    data: {
+      activeField: null,
+      unansweredFields: JSON.stringify(unanswered),
+      activePlayer: current.activePlayer, // B tried but failed → A plays next (B used their chance)
       activeQuestionType: null,
       timerStartedAt: null,
       activeFieldHint: null,

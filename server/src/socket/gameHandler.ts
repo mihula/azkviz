@@ -6,6 +6,7 @@ import {
   selectField,
   claimField,
   stealField,
+  stealFailed,
   markUnanswered,
   resolveYesNo,
   startTimer,
@@ -62,6 +63,11 @@ export function registerGameHandlers(io: TypedServer, socket: TypedSocket) {
 
   socket.on('moderator:markUnanswered', async () => {
     await markUnanswered()
+    await broadcast(io)
+  })
+
+  socket.on('moderator:stealFailed', async () => {
+    await stealFailed()
     await broadcast(io)
   })
 

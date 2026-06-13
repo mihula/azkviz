@@ -61,6 +61,7 @@ export interface ClientToServerEvents {
   'moderator:startTimer': () => void
   'moderator:stealField': (data: { player: 1 | 2 }) => void
   'moderator:markUnanswered': () => void
+  'moderator:stealFailed': () => void
   'moderator:resolveYesNo': (data: { correct: boolean }) => void
 }
 
