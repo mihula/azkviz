@@ -11,6 +11,7 @@ export default function ModeratorPage() {
   const [startForm, setStartForm] = useState({ p1: '', p2: '', round: 'NUMBERS' as Round })
   const [nextForm, setNextForm] = useState<'NUMBERS' | 'LETTERS' | null>(null)
   const [nextNames, setNextNames] = useState({ p1: '', p2: '' })
+  const [offerPhase, setOfferPhase] = useState(false)
   const prevStatus = useRef(gameState.status)
   useEffect(() => {
     if (prevStatus.current === 'FINISHED' && gameState.status !== 'FINISHED') {
@@ -19,6 +20,10 @@ export default function ModeratorPage() {
     }
     prevStatus.current = gameState.status
   }, [gameState.status])
+
+  useEffect(() => {
+    setOfferPhase(false)
+  }, [gameState.activeField])
 
   if (!token) return <PinGate onSuccess={(t) => { localStorage.setItem('mod_token', t); setToken(t) }} />
 
@@ -31,9 +36,20 @@ export default function ModeratorPage() {
     else setQuestion(null)
   }
 
+  async function loadYesNoQuestion() {
+    if (!token) return
+    const res = await fetch('/api/questions/yesno/random', {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    if (res.ok) setQuestion(await res.json())
+    else setQuestion(null)
+  }
+
   function handleFieldClick(fieldNumber: number) {
     socket?.emit('moderator:selectField', { fieldNumber })
-    loadQuestion(fieldNumber)
+    const isYesNo = gameState.unansweredFields.includes(fieldNumber)
+    if (isYesNo) loadYesNoQuestion()
+    else loadQuestion(fieldNumber)
   }
 
   function handleClaim(player: 1 | 2) {
@@ -77,6 +93,13 @@ export default function ModeratorPage() {
       {/* Left: Board */}
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 12, borderRight: '1px solid rgba(255,255,255,0.07)', gap: 10, overflow: 'hidden' }}>
         <HexBoard gameState={gameState} onFieldClick={gameState.status === 'PLAYING' ? handleFieldClick : undefined} compact />
+        {gameState.status === 'PLAYING' && gameState.activePlayer && (
+          <div style={{ fontSize: '0.75rem', color: '#94a3b8', textAlign: 'center' }}>
+            Na tahu: <span style={{ color: gameState.activePlayer === 1 ? '#f97316' : '#22d3ee', fontWeight: 700 }}>
+              {gameState.activePlayer === 1 ? gameState.player1Name || 'Hráč 1' : gameState.player2Name || 'Hráč 2'}
+            </span>
+          </div>
+        )}
         <div style={{ display: 'flex', gap: 8, width: '100%' }}>
           {[1, 2].map((p) => {
             const name = p === 1 ? gameState.player1Name : gameState.player2Name
@@ -141,13 +164,69 @@ export default function ModeratorPage() {
 
             {/* Action buttons */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-              <div style={{ fontSize: '0.65rem', fontWeight: 700, color: '#475569', letterSpacing: '1.5px', textTransform: 'uppercase' }}>Přiřadit pole</div>
-              <button disabled={!gameState.activeField} onClick={() => handleClaim(1)} style={{ width: '100%', padding: 12, border: 'none', borderRadius: 10, background: 'linear-gradient(135deg, #f97316, #c2410c)', color: 'white', fontWeight: 700, cursor: 'pointer', fontSize: '0.95rem', opacity: gameState.activeField ? 1 : 0.4 }}>
-                🟠 {gameState.player1Name || 'Hráč 1'} získal pole
-              </button>
-              <button disabled={!gameState.activeField} onClick={() => handleClaim(2)} style={{ width: '100%', padding: 12, border: 'none', borderRadius: 10, background: 'linear-gradient(135deg, #22d3ee, #0e7490)', color: '#042f2e', fontWeight: 700, cursor: 'pointer', fontSize: '0.95rem', opacity: gameState.activeField ? 1 : 0.4 }}>
-                🔵 {gameState.player2Name || 'Hráč 2'} získal pole
-              </button>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <div style={{ fontSize: '0.65rem', fontWeight: 700, color: '#475569', letterSpacing: '1.5px', textTransform: 'uppercase' }}>
+                  {gameState.activeQuestionType === 'yesno' ? 'Ano / Ne otázka' : 'Přiřadit pole'}
+                </div>
+                <button
+                  disabled={!gameState.activeField || !!gameState.timerStartedAt}
+                  onClick={() => socket?.emit('moderator:startTimer')}
+                  style={{ padding: '4px 10px', borderRadius: 6, border: '1px solid rgba(251,191,36,0.3)', background: gameState.timerStartedAt ? 'rgba(251,191,36,0.15)' : 'rgba(251,191,36,0.06)', color: gameState.timerStartedAt ? '#fbbf24' : '#78716c', cursor: gameState.activeField && !gameState.timerStartedAt ? 'pointer' : 'default', fontSize: '0.75rem', fontWeight: 600, opacity: gameState.activeField ? 1 : 0.4 }}>
+                  {gameState.timerStartedAt ? '⏱ Běží' : '▶ Timer'}
+                </button>
+              </div>
+
+              {gameState.activeQuestionType === 'yesno' ? (
+                // Ano/ne otázka
+                <>
+                  <button
+                    disabled={!gameState.activeField}
+                    onClick={() => { socket?.emit('moderator:resolveYesNo', { correct: true }); setQuestion(null) }}
+                    style={{ width: '100%', padding: 12, border: 'none', borderRadius: 10, background: 'linear-gradient(135deg, #22c55e, #15803d)', color: 'white', fontWeight: 700, cursor: 'pointer', fontSize: '0.9rem', opacity: gameState.activeField ? 1 : 0.4 }}>
+                    ✓ Správně → pole {gameState.activePlayer === 1 ? gameState.player1Name || 'Hráče 1' : gameState.player2Name || 'Hráče 2'}
+                  </button>
+                  <button
+                    disabled={!gameState.activeField}
+                    onClick={() => { socket?.emit('moderator:resolveYesNo', { correct: false }); setQuestion(null) }}
+                    style={{ width: '100%', padding: 12, border: 'none', borderRadius: 10, background: 'linear-gradient(135deg, #ef4444, #b91c1c)', color: 'white', fontWeight: 700, cursor: 'pointer', fontSize: '0.9rem', opacity: gameState.activeField ? 1 : 0.4 }}>
+                    ✗ Špatně → pole {gameState.activePlayer === 1 ? gameState.player2Name || 'Hráče 2' : gameState.player1Name || 'Hráče 1'}
+                  </button>
+                </>
+              ) : offerPhase ? (
+                // Nabídka soupeři
+                <>
+                  <div style={{ fontSize: '0.8rem', color: '#94a3b8', textAlign: 'center', padding: '4px 0' }}>
+                    Chce odpovídat {gameState.activePlayer === 1 ? gameState.player2Name || 'Hráč 2' : gameState.player1Name || 'Hráč 1'}?
+                  </div>
+                  <button
+                    onClick={() => { socket?.emit('moderator:stealField', { player: (gameState.activePlayer === 1 ? 2 : 1) as 1 | 2 }); setQuestion(null); setOfferPhase(false) }}
+                    style={{ width: '100%', padding: 12, border: 'none', borderRadius: 10, background: 'linear-gradient(135deg, #22d3ee, #0e7490)', color: '#042f2e', fontWeight: 700, cursor: 'pointer', fontSize: '0.9rem' }}>
+                    ✓ Soupeř odpověděl správně
+                  </button>
+                  <button
+                    onClick={() => { socket?.emit('moderator:markUnanswered'); setQuestion(null); setOfferPhase(false) }}
+                    style={{ width: '100%', padding: 12, borderRadius: 10, border: '1px solid rgba(245,158,11,0.3)', background: 'rgba(245,158,11,0.07)', color: '#fbbf24', fontWeight: 600, cursor: 'pointer', fontSize: '0.9rem' }}>
+                    ✗ Nikdo neuhodl
+                  </button>
+                </>
+              ) : (
+                // Normální otázka — fáze 1
+                <>
+                  <button
+                    disabled={!gameState.activeField}
+                    onClick={() => handleClaim(gameState.activePlayer as 1 | 2)}
+                    style={{ width: '100%', padding: 12, border: 'none', borderRadius: 10, background: gameState.activePlayer === 1 ? 'linear-gradient(135deg, #f97316, #c2410c)' : 'linear-gradient(135deg, #22d3ee, #0e7490)', color: gameState.activePlayer === 1 ? 'white' : '#042f2e', fontWeight: 700, cursor: 'pointer', fontSize: '0.95rem', opacity: gameState.activeField ? 1 : 0.4 }}>
+                    {gameState.activePlayer === 1 ? '🟠' : '🔵'} {gameState.activePlayer === 1 ? gameState.player1Name || 'Hráč 1' : gameState.player2Name || 'Hráč 2'} odpověděl správně
+                  </button>
+                  <button
+                    disabled={!gameState.activeField}
+                    onClick={() => setOfferPhase(true)}
+                    style={{ width: '100%', padding: 10, borderRadius: 10, border: '1px solid rgba(255,255,255,0.12)', background: 'rgba(255,255,255,0.05)', color: '#94a3b8', fontWeight: 600, cursor: 'pointer', fontSize: '0.85rem', opacity: gameState.activeField ? 1 : 0.4 }}>
+                    ✗ {gameState.activePlayer === 1 ? gameState.player1Name || 'Hráč 1' : gameState.player2Name || 'Hráč 2'} odpověděl špatně
+                  </button>
+                </>
+              )}
+
               <div style={{ display: 'flex', gap: 8 }}>
                 <button onClick={handleSkip} style={{ flex: 1, padding: 10, borderRadius: 10, border: '1px solid rgba(255,255,255,0.12)', background: 'rgba(255,255,255,0.05)', color: '#94a3b8', fontWeight: 600, cursor: 'pointer', fontSize: '0.85rem' }}>⏭ Přeskočit</button>
                 <button onClick={() => socket?.emit('moderator:resetGame')} style={{ flex: 1, padding: 10, borderRadius: 10, border: '1px solid rgba(239,68,68,0.25)', background: 'rgba(239,68,68,0.07)', color: '#f87171', fontWeight: 600, cursor: 'pointer', fontSize: '0.85rem' }}>↺ Reset</button>
