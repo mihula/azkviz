@@ -2,7 +2,7 @@
   "name": "server",
   "version": "1.0.0",
   "scripts": {
-    "dev": "tsx watch src/index.ts",
+    "dev": "prisma generate --schema ./prisma/schema.dev.prisma && prisma db push --schema ./prisma/schema.dev.prisma && tsx watch src/index.ts",
     "build": "prisma generate && tsc",
     "start": "prisma db push --accept-data-loss && node dist/index.js",
     "test": "vitest run",

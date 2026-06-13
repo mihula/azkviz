@@ -3,7 +3,7 @@
   "private": true,
   "workspaces": ["shared", "server", "client"],
   "scripts": {
-    "dev": "concurrently -n server,client -c cyan,magenta \"npm run dev --workspace=server\" \"npm run dev --workspace=client\"",
+    "dev": "npm run build --workspace=shared && concurrently -n server,client -c cyan,magenta \"npm run dev --workspace=server\" \"npm run dev --workspace=client\"",
     "build": "npm run build --workspace=shared && npm run build --workspace=server && npm run build --workspace=client",
     "package": "node scripts/package.mjs",
     "test": "npm run test --workspaces --if-present"
