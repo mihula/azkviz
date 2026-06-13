@@ -19,6 +19,8 @@ const INITIAL_STATE: GameState = {
   unansweredFields: [],
   activeQuestionType: null,
   timerStartedAt: null,
+  questionAssignments: {},
+  activeFieldHint: null,
 }
 
 export function useGameSocket(token?: string) {

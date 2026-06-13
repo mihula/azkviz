@@ -1,11 +1,10 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import PinGate from '../components/PinGate'
-import { Question, QuestionInput, Round } from 'azkivz-shared'
+import { Question, QuestionInput } from 'azkivz-shared'
 
 export default function AdminPage() {
   const [token, setToken] = useState<string | null>(() => localStorage.getItem('mod_token'))
   const [questions, setQuestions] = useState<Question[]>([])
-  const [filterRound, setFilterRound] = useState<Round | ''>('')
   const [form, setForm] = useState<Partial<QuestionInput & { id?: number }>>({})
   const [editing, setEditing] = useState<number | null>(null)
   const [importText, setImportText] = useState('')
@@ -25,10 +24,9 @@ export default function AdminPage() {
 
   const fetchQuestions = useCallback(async () => {
     if (!token) return
-    const url = filterRound ? `/api/questions?round=${filterRound}` : '/api/questions'
-    const res = await fetch(url, { headers: authHeaders })
+    const res = await fetch('/api/questions', { headers: authHeaders })
     if (res.ok) setQuestions(await res.json())
-  }, [filterRound, token, authHeaders])
+  }, [token, authHeaders])
 
   useEffect(() => { fetchQuestions() }, [fetchQuestions])
 
@@ -139,27 +137,20 @@ export default function AdminPage() {
             <button onClick={() => setActiveTab('yesno')} style={{ padding: '6px 16px', borderRadius: 8, border: 'none', background: activeTab === 'yesno' ? 'linear-gradient(135deg, #f59e0b, #b45309)' : 'rgba(255,255,255,0.06)', color: activeTab === 'yesno' ? 'white' : '#64748b', fontWeight: 600, cursor: 'pointer', fontSize: '0.85rem' }}>
               Ano/Ne ({yesnoQuestions.length})
             </button>
-            {activeTab === 'questions' && (
-              <select value={filterRound} onChange={e => setFilterRound(e.target.value as Round | '')} style={{ ...inputStyle, width: 'auto' }}>
-                <option value="">Všechna kola</option>
-                <option value="NUMBERS">Kolo 1 — Čísla</option>
-                <option value="LETTERS">Kolo 2 — Písmena</option>
-              </select>
-            )}
           </div>
           {activeTab === 'questions' ? (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
               {questions.map(q => (
                 <div key={q.id} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 10, padding: '10px 14px', display: 'flex', alignItems: 'flex-start', gap: 12 }}>
-                  <div style={{ flexShrink: 0, width: 40, height: 46, clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)', background: q.round === 'NUMBERS' ? 'linear-gradient(135deg, #f97316, #c2410c)' : 'linear-gradient(135deg, #6366f1, #4338ca)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 800, fontSize: '0.8rem' }}>
-                    {q.fieldNumber}
+                  <div style={{ flexShrink: 0, minWidth: 36, height: 46, clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)', background: 'linear-gradient(135deg, #f97316, #c2410c)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 800, fontSize: '0.75rem', padding: '0 4px' }}>
+                    {q.answerHint}
                   </div>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ fontSize: '0.85rem', color: '#e2e8f0', marginBottom: 4 }}>{q.text}</div>
                     <div style={{ fontSize: '0.78rem', color: '#22d3ee' }}>→ {q.answer}</div>
                   </div>
                   <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
-                    <button onClick={() => { setEditing(q.id); setForm({ round: q.round, fieldNumber: q.fieldNumber, text: q.text, answer: q.answer }) }} style={{ padding: '4px 10px', borderRadius: 6, border: '1px solid rgba(255,255,255,0.12)', background: 'rgba(255,255,255,0.05)', color: '#94a3b8', cursor: 'pointer', fontSize: '0.78rem' }}>Editovat</button>
+                    <button onClick={() => { setEditing(q.id); setForm({ text: q.text, answer: q.answer, answerHint: q.answerHint }) }} style={{ padding: '4px 10px', borderRadius: 6, border: '1px solid rgba(255,255,255,0.12)', background: 'rgba(255,255,255,0.05)', color: '#94a3b8', cursor: 'pointer', fontSize: '0.78rem' }}>Editovat</button>
                     <button onClick={() => handleDelete(q.id)} style={{ padding: '4px 10px', borderRadius: 6, border: '1px solid rgba(239,68,68,0.2)', background: 'rgba(239,68,68,0.06)', color: '#f87171', cursor: 'pointer', fontSize: '0.78rem' }}>Smazat</button>
                   </div>
                 </div>
@@ -196,14 +187,9 @@ export default function AdminPage() {
               <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 12, padding: 16 }}>
                 <h3 style={{ fontSize: '0.85rem', fontWeight: 700, color: '#94a3b8', marginBottom: 12 }}>{editing !== null ? 'Upravit otázku' : 'Přidat otázku'}</h3>
                 <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                  <select value={form.round ?? ''} onChange={e => setForm(f => ({ ...f, round: e.target.value as Round }))} style={inputStyle} required>
-                    <option value="" disabled>Kolo</option>
-                    <option value="NUMBERS">Kolo 1 — Čísla</option>
-                    <option value="LETTERS">Kolo 2 — Písmena</option>
-                  </select>
-                  <input type="number" min={1} max={28} value={form.fieldNumber ?? ''} onChange={e => setForm(f => ({ ...f, fieldNumber: Number(e.target.value) }))} placeholder="Číslo pole (1–28)" style={inputStyle} required />
                   <textarea value={form.text ?? ''} onChange={e => setForm(f => ({ ...f, text: e.target.value }))} placeholder="Text otázky" rows={3} style={{ ...inputStyle, resize: 'vertical' }} required />
                   <input value={form.answer ?? ''} onChange={e => setForm(f => ({ ...f, answer: e.target.value }))} placeholder="Správná odpověď" style={inputStyle} required />
+                  <input value={form.answerHint ?? ''} onChange={e => setForm(f => ({ ...f, answerHint: e.target.value }))} placeholder="Hint (nechej prázdné = auto)" style={inputStyle} />
                   <div style={{ display: 'flex', gap: 8 }}>
                     <button type="submit" style={{ flex: 1, padding: '9px', borderRadius: 8, border: 'none', background: 'linear-gradient(135deg, #f97316, #ea580c)', color: 'white', fontWeight: 700, cursor: 'pointer', fontSize: '0.9rem' }}>
                       {editing !== null ? '✓ Uložit' : '+ Přidat'}
@@ -219,7 +205,7 @@ export default function AdminPage() {
               <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 12, padding: 16 }}>
                 <h3 style={{ fontSize: '0.85rem', fontWeight: 700, color: '#94a3b8', marginBottom: 8 }}>Import z JSON</h3>
                 <div style={{ fontSize: '0.75rem', color: '#475569', marginBottom: 8, fontFamily: 'monospace', background: 'rgba(0,0,0,0.3)', borderRadius: 6, padding: 8 }}>
-                  {`[{"round":"NUMBERS","fieldNumber":1,"text":"...","answer":"..."}]`}
+                  {`[{"text":"...","answer":"..."}]`}
                 </div>
                 <textarea value={importText} onChange={e => setImportText(e.target.value)} placeholder="Vlož JSON nebo načti soubor…" rows={5} style={{ ...inputStyle, fontFamily: 'monospace', fontSize: '0.78rem', marginBottom: 8, resize: 'vertical' }} />
                 <div style={{ display: 'flex', gap: 8, marginBottom: 8 }}>

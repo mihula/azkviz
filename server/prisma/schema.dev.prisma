@@ -8,14 +8,11 @@ datasource db {
 }
 
 model Question {
-  id          Int      @id @default(autoincrement())
-  round       String
-  fieldNumber Int
-  text        String
-  answer      String
-  createdAt   DateTime @default(now())
-
-  @@unique([round, fieldNumber])
+  id         Int      @id @default(autoincrement())
+  text       String
+  answer     String
+  answerHint String
+  createdAt  DateTime @default(now())
 }
 
 model YesNoQuestion {
@@ -36,8 +33,10 @@ model GameState {
   claimedP2          String    @default("[]")
   winner             Int?
   updatedAt          DateTime  @updatedAt
-  activePlayer       Int?
-  unansweredFields   String    @default("[]")
-  activeQuestionType String?
-  timerStartedAt     DateTime?
+  activePlayer        Int?
+  unansweredFields    String    @default("[]")
+  activeQuestionType  String?
+  timerStartedAt      DateTime?
+  questionAssignments String    @default("{}")
+  activeFieldHint     String?
 }

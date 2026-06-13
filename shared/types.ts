@@ -18,21 +18,22 @@ export interface GameState {
   unansweredFields: number[]
   activeQuestionType: 'normal' | 'yesno' | null
   timerStartedAt: string | null
+  questionAssignments: Record<string, number>
+  activeFieldHint: string | null
 }
 
 export interface Question {
   id: number
-  round: Round
-  fieldNumber: number
   text: string
   answer: string
+  answerHint: string
+  createdAt: string
 }
 
 export interface QuestionInput {
-  round: Round
-  fieldNumber: number
   text: string
   answer: string
+  answerHint?: string
 }
 
 export interface YesNoQuestion {

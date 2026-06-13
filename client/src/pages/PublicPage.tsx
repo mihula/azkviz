@@ -48,6 +48,11 @@ export default function PublicPage() {
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'rgba(251,191,36,0.1)', border: '1px solid rgba(251,191,36,0.25)', borderRadius: 24, padding: '6px 18px', fontSize: '1rem', color: '#fbbf24', fontWeight: 500 }}>
             <span style={{ width: 8, height: 8, background: '#fbbf24', borderRadius: '50%' }} />
             Aktivní: <strong style={{ marginLeft: 4, color: '#fde68a', fontSize: '1.2rem' }}>{gameState.activeField}</strong>
+            {gameState.activeFieldHint && (
+              <span style={{ marginLeft: 8, background: 'rgba(251,191,36,0.2)', borderRadius: 8, padding: '2px 10px', fontSize: '1.1rem', fontWeight: 900, letterSpacing: '0.05em', color: '#fde68a' }}>
+                {gameState.activeFieldHint}
+              </span>
+            )}
           </div>
         )}
         {countdown !== null && (

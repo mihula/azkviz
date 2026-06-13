@@ -6,17 +6,17 @@ import { Application } from 'express'
 
 vi.mock('../../services/questionService', () => ({
   listQuestions: vi.fn().mockResolvedValue([
-    { id: 1, round: 'NUMBERS', fieldNumber: 1, text: 'Otázka?', answer: 'Odpověď' },
+    { id: 1, text: 'Otázka?', answer: 'Odpověď', answerHint: 'O', createdAt: new Date().toISOString() },
   ]),
   createQuestion: vi.fn().mockResolvedValue(
-    { id: 2, round: 'NUMBERS', fieldNumber: 2, text: 'Nová?', answer: 'Nová' }
+    { id: 2, text: 'Nová?', answer: 'Nová', answerHint: 'N', createdAt: new Date().toISOString() }
   ),
   updateQuestion: vi.fn().mockResolvedValue(
-    { id: 1, round: 'NUMBERS', fieldNumber: 1, text: 'Upravená?', answer: 'Upravená' }
+    { id: 1, text: 'Upravená?', answer: 'Upravená', answerHint: 'U', createdAt: new Date().toISOString() }
   ),
   deleteQuestion: vi.fn().mockResolvedValue(undefined),
   importQuestions: vi.fn().mockResolvedValue(3),
-  getQuestionForField: vi.fn().mockResolvedValue(null),
+  getQuestionByAssignment: vi.fn().mockResolvedValue(null),
 }))
 
 let app: Application

@@ -13,11 +13,13 @@ function parseState(raw: any): GameState {
     claimedP1: JSON.parse(raw.claimedP1),
     claimedP2: JSON.parse(raw.claimedP2),
     winner: raw.winner,
-    updatedAt: raw.updatedAt.toISOString(),
+    updatedAt: raw.updatedAt instanceof Date ? raw.updatedAt.toISOString() : raw.updatedAt,
     activePlayer: raw.activePlayer as 1 | 2 | null,
     unansweredFields: JSON.parse(raw.unansweredFields || '[]'),
     activeQuestionType: raw.activeQuestionType as 'normal' | 'yesno' | null,
-    timerStartedAt: raw.timerStartedAt ? raw.timerStartedAt.toISOString() : null,
+    timerStartedAt: raw.timerStartedAt ? (raw.timerStartedAt instanceof Date ? raw.timerStartedAt.toISOString() : raw.timerStartedAt) : null,
+    questionAssignments: JSON.parse(raw.questionAssignments || '{}'),
+    activeFieldHint: raw.activeFieldHint ?? null,
   }
 }
 
@@ -36,6 +38,14 @@ export async function startGame(
   player2Name: string,
   round: Round
 ): Promise<GameState> {
+  const questions = await prisma.question.findMany({ select: { id: true } })
+  if (questions.length === 0) throw new Error('No questions in database')
+
+  const assignments: Record<string, number> = {}
+  for (let f = 1; f <= 28; f++) {
+    assignments[String(f)] = questions[Math.floor(Math.random() * questions.length)].id
+  }
+
   const raw = await prisma.gameState.update({
     where: { id: 1 },
     data: {
@@ -51,6 +61,8 @@ export async function startGame(
       unansweredFields: '[]',
       activeQuestionType: null,
       timerStartedAt: null,
+      questionAssignments: JSON.stringify(assignments),
+      activeFieldHint: null,
     },
   })
   return parseState(raw)
@@ -61,9 +73,18 @@ export async function selectField(fieldNumber: number): Promise<GameState> {
   if (!current) throw new Error('GameState not initialized')
   const unanswered: number[] = JSON.parse(current.unansweredFields || '[]')
   const questionType = unanswered.includes(fieldNumber) ? 'yesno' : 'normal'
+
+  const assignments = JSON.parse(current.questionAssignments || '{}') as Record<string, number>
+  const questionId = assignments[String(fieldNumber)]
+  let activeFieldHint: string | null = null
+  if (questionId) {
+    const q = await prisma.question.findUnique({ where: { id: questionId }, select: { answerHint: true } })
+    activeFieldHint = q?.answerHint ?? null
+  }
+
   const raw = await prisma.gameState.update({
     where: { id: 1 },
-    data: { activeField: fieldNumber, activeQuestionType: questionType, timerStartedAt: null },
+    data: { activeField: fieldNumber, activeQuestionType: questionType, timerStartedAt: null, activeFieldHint },
   })
   return parseState(raw)
 }
@@ -102,6 +123,7 @@ export async function claimField(player: 1 | 2): Promise<GameState> {
       activePlayer: winner ? null : flipPlayer(current.activePlayer as 1 | 2),
       activeQuestionType: null,
       timerStartedAt: null,
+      activeFieldHint: null,
     },
   })
   return parseState(raw)
@@ -133,6 +155,7 @@ export async function stealField(player: 1 | 2): Promise<GameState> {
       activePlayer: winner ? null : current.activePlayer,  // does NOT flip — stealer loses next turn
       activeQuestionType: null,
       timerStartedAt: null,
+      activeFieldHint: null,
     },
   })
   return parseState(raw)
@@ -155,6 +178,7 @@ export async function markUnanswered(): Promise<GameState> {
       activePlayer: flipPlayer(current.activePlayer as 1 | 2),
       activeQuestionType: null,
       timerStartedAt: null,
+      activeFieldHint: null,
     },
   })
   return parseState(raw)
@@ -191,6 +215,7 @@ export async function resolveYesNo(correct: boolean): Promise<GameState> {
       activePlayer: winner ? null : flipPlayer(activePlayer),
       activeQuestionType: null,
       timerStartedAt: null,
+      activeFieldHint: null,
     },
   })
   return parseState(raw)
@@ -205,6 +230,7 @@ export async function skipField(): Promise<GameState> {
       activeField: null,
       activeQuestionType: null,
       timerStartedAt: null,
+      activeFieldHint: null,
       activePlayer: flipPlayer(current.activePlayer as 1 | 2),
     },
   })
@@ -226,6 +252,8 @@ export async function resetGame(): Promise<GameState> {
       unansweredFields: '[]',
       activeQuestionType: null,
       timerStartedAt: null,
+      questionAssignments: '{}',
+      activeFieldHint: null,
     },
   })
   return parseState(raw)

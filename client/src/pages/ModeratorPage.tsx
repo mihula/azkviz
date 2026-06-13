@@ -62,7 +62,7 @@ export default function ModeratorPage() {
 
   async function loadQuestion(fieldNumber: number) {
     if (!token) return
-    const res = await fetch(`/api/questions/field?round=${gameState.round}&fieldNumber=${fieldNumber}`, {
+    const res = await fetch(`/api/questions/for-field/${fieldNumber}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
     if (res.ok) setQuestion(await res.json())

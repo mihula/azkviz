@@ -19,6 +19,8 @@ const baseState: GameState = {
   unansweredFields: [],
   activeQuestionType: null,
   timerStartedAt: null,
+  questionAssignments: {},
+  activeFieldHint: null,
 }
 
 describe('HexBoard', () => {

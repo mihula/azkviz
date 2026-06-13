@@ -6,32 +6,26 @@ import {
   updateQuestion,
   deleteQuestion,
   importQuestions,
-  getQuestionForField,
+  getQuestionByAssignment,
 } from '../services/questionService'
 
 const router = Router()
 
-// /field is defined before router.use(requireAuth), so requireAuth is passed explicitly
-router.get('/field', requireAuth, async (req, res) => {
-  const { round, fieldNumber } = req.query
-  if (!round || !fieldNumber) {
-    res.status(400).json({ error: 'round and fieldNumber required' })
-    return
-  }
-  const q = await getQuestionForField(String(round), Number(fieldNumber))
+router.use(requireAuth)
+
+router.get('/', async (_req, res) => {
+  const questions = await listQuestions()
+  res.json(questions)
+})
+
+// /for-field and /import must come before /:id
+router.get('/for-field/:fieldNumber', async (req, res) => {
+  const q = await getQuestionByAssignment(Number(req.params.fieldNumber))
   if (!q) {
     res.status(404).json({ error: 'Question not found' })
     return
   }
   res.json(q)
-})
-
-router.use(requireAuth)
-
-router.get('/', async (req, res) => {
-  const { round } = req.query
-  const questions = await listQuestions(round as string | undefined)
-  res.json(questions)
 })
 
 router.post('/', async (req, res) => {
@@ -43,7 +37,6 @@ router.post('/', async (req, res) => {
   }
 })
 
-// /import must come before /:id to avoid being matched as an id
 router.post('/import', async (req, res) => {
   if (!Array.isArray(req.body)) {
     res.status(400).json({ error: 'Expected array of questions' })

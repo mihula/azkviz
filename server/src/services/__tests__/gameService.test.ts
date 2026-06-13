@@ -8,6 +8,10 @@ vi.mock('../../lib/prisma', () => ({
       update: vi.fn(),
       upsert: vi.fn(),
     },
+    question: {
+      findMany: vi.fn(),
+      findUnique: vi.fn(),
+    },
   },
 }))
 
@@ -40,17 +44,22 @@ const mockDbState = {
   unansweredFields: '[]',
   activeQuestionType: null,
   timerStartedAt: null,
+  questionAssignments: '{}',
+  activeFieldHint: null,
 }
 
 beforeEach(() => {
   vi.clearAllMocks()
   vi.mocked(prisma.gameState.findUnique).mockResolvedValue(mockDbState as any)
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   vi.mocked(prisma.gameState.update).mockImplementation((async ({ data }: any) => ({
     ...mockDbState,
     ...data,
     updatedAt: new Date(),
   })) as any)
+  vi.mocked(prisma.question.findMany).mockResolvedValue([
+    { id: 1, text: 'Q1', answer: 'Odpověď jedna', answerHint: 'OJ', createdAt: new Date() },
+  ] as any)
+  vi.mocked(prisma.question.findUnique).mockResolvedValue(null as any)
 })
 
 describe('getGameState', () => {
