@@ -42,10 +42,11 @@ export default function HexBoard({ gameState, onFieldClick, compact = false }: H
     rows.push(row)
   }
 
-  function cellState(f: number): 'free' | 'active' | 'p1' | 'p2' {
+  function cellState(f: number): 'free' | 'active' | 'p1' | 'p2' | 'unanswered' {
     if (f === gameState.activeField) return 'active'
     if (gameState.claimedP1.includes(f)) return 'p1'
     if (gameState.claimedP2.includes(f)) return 'p2'
+    if (gameState.unansweredFields?.includes(f)) return 'unanswered'
     return 'free'
   }
 

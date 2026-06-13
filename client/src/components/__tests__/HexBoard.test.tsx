@@ -15,6 +15,10 @@ const baseState: GameState = {
   claimedP2: [],
   winner: null,
   updatedAt: new Date().toISOString(),
+  activePlayer: 1,
+  unansweredFields: [],
+  activeQuestionType: null,
+  timerStartedAt: null,
 }
 
 describe('HexBoard', () => {
@@ -53,5 +57,12 @@ describe('HexBoard', () => {
     render(<HexBoard gameState={{ ...baseState, claimedP1: [1, 2], claimedP2: [3] }} />)
     expect(document.querySelector('[data-field="1"]')).toHaveClass('p1')
     expect(document.querySelector('[data-field="3"]')).toHaveClass('p2')
+  })
+
+  it('marks unanswered fields', () => {
+    render(<HexBoard gameState={{ ...baseState, unansweredFields: [7, 8] } as any} />)
+    expect(document.querySelector('[data-field="7"]')).toHaveClass('unanswered')
+    expect(document.querySelector('[data-field="8"]')).toHaveClass('unanswered')
+    expect(document.querySelector('[data-field="9"]')).not.toHaveClass('unanswered')
   })
 })

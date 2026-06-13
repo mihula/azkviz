@@ -1,7 +1,7 @@
 import { LETTERS_MAP } from 'azkivz-shared'
 import type { Round } from 'azkivz-shared'
 
-type CellState = 'free' | 'active' | 'p1' | 'p2'
+type CellState = 'free' | 'active' | 'p1' | 'p2' | 'unanswered'
 
 interface HexCellProps {
   fieldNumber: number
