@@ -1,59 +1,226 @@
 [
-  { "round": "NUMBERS", "fieldNumber": 1,  "text": "Která hora je nejvyšší na světě?", "answer": "Everest" },
-  { "round": "NUMBERS", "fieldNumber": 2,  "text": "Kolik planet je ve Sluneční soustavě?", "answer": "8" },
-  { "round": "NUMBERS", "fieldNumber": 3,  "text": "Jak se jmenuje hlavní město Francie?", "answer": "Paříž" },
-  { "round": "NUMBERS", "fieldNumber": 4,  "text": "Jaký je chemický vzorec vody?", "answer": "H₂O" },
-  { "round": "NUMBERS", "fieldNumber": 5,  "text": "Která řeka je nejdelší na světě?", "answer": "Nil" },
-  { "round": "NUMBERS", "fieldNumber": 6,  "text": "Jak se jmenuje největší oceán světa?", "answer": "Tichý oceán" },
-  { "round": "NUMBERS", "fieldNumber": 7,  "text": "Kolik hodin má jeden den?", "answer": "24" },
-  { "round": "NUMBERS", "fieldNumber": 8,  "text": "Jak se jmenuje hlavní město Německa?", "answer": "Berlín" },
-  { "round": "NUMBERS", "fieldNumber": 9,  "text": "Které zvíře je nejrychlejší na světě?", "answer": "Gepard" },
-  { "round": "NUMBERS", "fieldNumber": 10, "text": "Kolik centimetrů má jeden metr?", "answer": "100" },
-  { "round": "NUMBERS", "fieldNumber": 11, "text": "Jak se jmenuje planeta nejblíže Slunci?", "answer": "Merkur" },
-  { "round": "NUMBERS", "fieldNumber": 12, "text": "Jak se jmenuje hlavní město Itálie?", "answer": "Řím" },
-  { "round": "NUMBERS", "fieldNumber": 13, "text": "Kolik noh má pavouk?", "answer": "8" },
-  { "round": "NUMBERS", "fieldNumber": 14, "text": "Jak se jmenuje největší světadíl?", "answer": "Asie" },
-  { "round": "NUMBERS", "fieldNumber": 15, "text": "Jak se jmenuje největší planeta Sluneční soustavy?", "answer": "Jupiter" },
-  { "round": "NUMBERS", "fieldNumber": 16, "text": "Jak se jmenuje hlavní město Španělska?", "answer": "Madrid" },
-  { "round": "NUMBERS", "fieldNumber": 17, "text": "Která barva vznikne smícháním modré a žluté?", "answer": "Zelená" },
-  { "round": "NUMBERS", "fieldNumber": 18, "text": "Kolik minut má jedna hodina?", "answer": "60" },
-  { "round": "NUMBERS", "fieldNumber": 19, "text": "Který savec umí létat?", "answer": "Netopýr" },
-  { "round": "NUMBERS", "fieldNumber": 20, "text": "Jak se jmenuje nejdelší řeka v Evropě?", "answer": "Volha" },
-  { "round": "NUMBERS", "fieldNumber": 21, "text": "Kolik dní má únor v přestupném roce?", "answer": "29" },
-  { "round": "NUMBERS", "fieldNumber": 22, "text": "Jak se jmenuje hlavní město Japonska?", "answer": "Tokio" },
-  { "round": "NUMBERS", "fieldNumber": 23, "text": "Kolik kilogramů je v jedné tuně?", "answer": "1000" },
-  { "round": "NUMBERS", "fieldNumber": 24, "text": "Které zvíře je největší na světě?", "answer": "Modrá velryba" },
-  { "round": "NUMBERS", "fieldNumber": 25, "text": "Jak se jmenuje hlavní město Austrálie?", "answer": "Canberra" },
-  { "round": "NUMBERS", "fieldNumber": 26, "text": "Kolik stran má krychle?", "answer": "6" },
-  { "round": "NUMBERS", "fieldNumber": 27, "text": "Který orgán v těle čerpá krev?", "answer": "Srdce" },
-  { "round": "NUMBERS", "fieldNumber": 28, "text": "Na které řece leží Praha?", "answer": "Vltava" },
-
-  { "round": "LETTERS", "fieldNumber": 1,  "text": "Které zvíře má nejdelší krk?", "answer": "Žirafa" },
-  { "round": "LETTERS", "fieldNumber": 2,  "text": "Kolik hráčů nastupuje do fotbalu na hřiště za jeden tým?", "answer": "11" },
-  { "round": "LETTERS", "fieldNumber": 3,  "text": "Jak se jmenuje hlavní město Velké Británie?", "answer": "Londýn" },
-  { "round": "LETTERS", "fieldNumber": 4,  "text": "Jak se jmenuje nejmenší kontinent?", "answer": "Austrálie" },
-  { "round": "LETTERS", "fieldNumber": 5,  "text": "Kolik dní má týden?", "answer": "7" },
-  { "round": "LETTERS", "fieldNumber": 6,  "text": "Na jakém kontinentu leží Egypt?", "answer": "Afrika" },
-  { "round": "LETTERS", "fieldNumber": 7,  "text": "Co je nejtvrdší přírodní látka na světě?", "answer": "Diamant" },
-  { "round": "LETTERS", "fieldNumber": 8,  "text": "Jak se jmenuje měna Spojených států amerických?", "answer": "Dolar" },
-  { "round": "LETTERS", "fieldNumber": 9,  "text": "Jak se jmenuje hlavní město Ruska?", "answer": "Moskva" },
-  { "round": "LETTERS", "fieldNumber": 10, "text": "Jak se chemická značka Au – o jaký kov se jedná?", "answer": "Zlato" },
-  { "round": "LETTERS", "fieldNumber": 11, "text": "Kolik barev má duha?", "answer": "7" },
-  { "round": "LETTERS", "fieldNumber": 12, "text": "Jak se jmenuje nejhlubší oceánský příkop světa?", "answer": "Mariánský příkop" },
-  { "round": "LETTERS", "fieldNumber": 13, "text": "Jak se jmenuje hlavní město Polska?", "answer": "Varšava" },
-  { "round": "LETTERS", "fieldNumber": 14, "text": "Jak se jmenuje největší poušť světa?", "answer": "Sahara" },
-  { "round": "LETTERS", "fieldNumber": 15, "text": "Kolik sekund má jedna minuta?", "answer": "60" },
-  { "round": "LETTERS", "fieldNumber": 16, "text": "Kolik očí má pavouk?", "answer": "8" },
-  { "round": "LETTERS", "fieldNumber": 17, "text": "Jak se jmenuje hlavní město Brazílie?", "answer": "Brasília" },
-  { "round": "LETTERS", "fieldNumber": 18, "text": "Jak se jmenuje planeta, která má viditelné prstence?", "answer": "Saturn" },
-  { "round": "LETTERS", "fieldNumber": 19, "text": "Jak se jmenuje nejpomalejší zvíře na světě?", "answer": "Lenochod" },
-  { "round": "LETTERS", "fieldNumber": 20, "text": "Jak se jmenuje hlavní město Egypta?", "answer": "Káhira" },
-  { "round": "LETTERS", "fieldNumber": 21, "text": "Kolik gramů je v jednom kilogramu?", "answer": "1000" },
-  { "round": "LETTERS", "fieldNumber": 22, "text": "Kolik hráčů nastupuje ve volejbale na hřiště za jeden tým?", "answer": "6" },
-  { "round": "LETTERS", "fieldNumber": 23, "text": "Jak se jmenuje hlavní město Číny?", "answer": "Peking" },
-  { "round": "LETTERS", "fieldNumber": 24, "text": "Jak se jmenuje nejhlubší jezero na světě?", "answer": "Bajkal" },
-  { "round": "LETTERS", "fieldNumber": 25, "text": "Kolik noh má včela?", "answer": "6" },
-  { "round": "LETTERS", "fieldNumber": 26, "text": "Jak se jmenuje hvězda, kolem které obíhá Země?", "answer": "Slunce" },
-  { "round": "LETTERS", "fieldNumber": 27, "text": "Jak se jmenuje hlavní město Norska?", "answer": "Oslo" },
-  { "round": "LETTERS", "fieldNumber": 28, "text": "Jak se jmenuje nejdelší zeď na světě?", "answer": "Čínská zeď" }
+  {
+    "text": "Která hora je nejvyšší na světě?",
+    "answer": "Everest"
+  },
+  {
+    "text": "Kolik planet je ve Sluneční soustavě?",
+    "answer": "8"
+  },
+  {
+    "text": "Jak se jmenuje hlavní město Francie?",
+    "answer": "Paříž"
+  },
+  {
+    "text": "Jaký je chemický vzorec vody?",
+    "answer": "H₂O"
+  },
+  {
+    "text": "Která řeka je nejdelší na světě?",
+    "answer": "Nil"
+  },
+  {
+    "text": "Jak se jmenuje největší oceán světa?",
+    "answer": "Tichý oceán"
+  },
+  {
+    "text": "Kolik hodin má jeden den?",
+    "answer": "24"
+  },
+  {
+    "text": "Jak se jmenuje hlavní město Německa?",
+    "answer": "Berlín"
+  },
+  {
+    "text": "Které zvíře je nejrychlejší na světě?",
+    "answer": "Gepard"
+  },
+  {
+    "text": "Kolik centimetrů má jeden metr?",
+    "answer": "100"
+  },
+  {
+    "text": "Jak se jmenuje planeta nejblíže Slunci?",
+    "answer": "Merkur"
+  },
+  {
+    "text": "Jak se jmenuje hlavní město Itálie?",
+    "answer": "Řím"
+  },
+  {
+    "text": "Kolik noh má pavouk?",
+    "answer": "8"
+  },
+  {
+    "text": "Jak se jmenuje největší světadíl?",
+    "answer": "Asie"
+  },
+  {
+    "text": "Jak se jmenuje největší planeta Sluneční soustavy?",
+    "answer": "Jupiter"
+  },
+  {
+    "text": "Jak se jmenuje hlavní město Španělska?",
+    "answer": "Madrid"
+  },
+  {
+    "text": "Která barva vznikne smícháním modré a žluté?",
+    "answer": "Zelená"
+  },
+  {
+    "text": "Kolik minut má jedna hodina?",
+    "answer": "60"
+  },
+  {
+    "text": "Který savec umí létat?",
+    "answer": "Netopýr"
+  },
+  {
+    "text": "Jak se jmenuje nejdelší řeka v Evropě?",
+    "answer": "Volha"
+  },
+  {
+    "text": "Kolik dní má únor v přestupném roce?",
+    "answer": "29"
+  },
+  {
+    "text": "Jak se jmenuje hlavní město Japonska?",
+    "answer": "Tokio"
+  },
+  {
+    "text": "Kolik kilogramů je v jedné tuně?",
+    "answer": "1000"
+  },
+  {
+    "text": "Které zvíře je největší na světě?",
+    "answer": "Modrá velryba"
+  },
+  {
+    "text": "Jak se jmenuje hlavní město Austrálie?",
+    "answer": "Canberra"
+  },
+  {
+    "text": "Kolik stran má krychle?",
+    "answer": "6"
+  },
+  {
+    "text": "Který orgán v těle čerpá krev?",
+    "answer": "Srdce"
+  },
+  {
+    "text": "Na které řece leží Praha?",
+    "answer": "Vltava"
+  },
+  {
+    "text": "Které zvíře má nejdelší krk?",
+    "answer": "Žirafa"
+  },
+  {
+    "text": "Kolik hráčů nastupuje do fotbalu na hřiště za jeden tým?",
+    "answer": "11"
+  },
+  {
+    "text": "Jak se jmenuje hlavní město Velké Británie?",
+    "answer": "Londýn"
+  },
+  {
+    "text": "Jak se jmenuje nejmenší kontinent?",
+    "answer": "Austrálie"
+  },
+  {
+    "text": "Kolik dní má týden?",
+    "answer": "7"
+  },
+  {
+    "text": "Na jakém kontinentu leží Egypt?",
+    "answer": "Afrika"
+  },
+  {
+    "text": "Co je nejtvrdší přírodní látka na světě?",
+    "answer": "Diamant"
+  },
+  {
+    "text": "Jak se jmenuje měna Spojených států amerických?",
+    "answer": "Dolar"
+  },
+  {
+    "text": "Jak se jmenuje hlavní město Ruska?",
+    "answer": "Moskva"
+  },
+  {
+    "text": "Jak se chemická značka Au – o jaký kov se jedná?",
+    "answer": "Zlato"
+  },
+  {
+    "text": "Kolik barev má duha?",
+    "answer": "7"
+  },
+  {
+    "text": "Jak se jmenuje nejhlubší oceánský příkop světa?",
+    "answer": "Mariánský příkop"
+  },
+  {
+    "text": "Jak se jmenuje hlavní město Polska?",
+    "answer": "Varšava"
+  },
+  {
+    "text": "Jak se jmenuje největší poušť světa?",
+    "answer": "Sahara"
+  },
+  {
+    "text": "Kolik sekund má jedna minuta?",
+    "answer": "60"
+  },
+  {
+    "text": "Kolik očí má pavouk?",
+    "answer": "8"
+  },
+  {
+    "text": "Jak se jmenuje hlavní město Brazílie?",
+    "answer": "Brasília"
+  },
+  {
+    "text": "Jak se jmenuje planeta, která má viditelné prstence?",
+    "answer": "Saturn"
+  },
+  {
+    "text": "Jak se jmenuje nejpomalejší zvíře na světě?",
+    "answer": "Lenochod"
+  },
+  {
+    "text": "Jak se jmenuje hlavní město Egypta?",
+    "answer": "Káhira"
+  },
+  {
+    "text": "Kolik gramů je v jednom kilogramu?",
+    "answer": "1000"
+  },
+  {
+    "text": "Kolik hráčů nastupuje ve volejbale na hřiště za jeden tým?",
+    "answer": "6"
+  },
+  {
+    "text": "Jak se jmenuje hlavní město Číny?",
+    "answer": "Peking"
+  },
+  {
+    "text": "Jak se jmenuje nejhlubší jezero na světě?",
+    "answer": "Bajkal"
+  },
+  {
+    "text": "Kolik noh má včela?",
+    "answer": "6"
+  },
+  {
+    "text": "Jak se jmenuje hvězda, kolem které obíhá Země?",
+    "answer": "Slunce"
+  },
+  {
+    "text": "Jak se jmenuje hlavní město Norska?",
+    "answer": "Oslo"
+  },
+  {
+    "text": "Jak se jmenuje nejdelší zeď na světě?",
+    "answer": "Čínská zeď"
+  }
 ]
