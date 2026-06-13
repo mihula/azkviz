@@ -14,7 +14,7 @@ function calcHexSize(compact: boolean) {
   const GAP = 5
   const nonBoardH = 168
   const availH = window.innerHeight - nonBoardH
-  const availW = window.innerWidth - 248  // subtract timer hex placeholders (2 × 100 + gaps)
+  const availW = window.innerWidth - 352  // subtract timer hex placeholders (2 × 140 + 2 × 24 gap + 24 outer padding)
   const hexHfromH = availH / 5.5
   const hexHfromW = (availW - 6 * GAP) / (7 * 0.866)
   const hexH = Math.floor(Math.min(hexHfromH, hexHfromW))

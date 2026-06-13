@@ -24,20 +24,21 @@ function useCountdown(timerStartedAt: string | null): number | null {
   return remaining
 }
 
-function TimerHex({ remaining, player }: { remaining: number; player: 1 | 2 }) {
-  const emptyPct = (1 - remaining / TIMER_SECONDS) * 100
+function TimerHex({ remaining, player }: { remaining: number | null; player: 1 | 2 }) {
+  const r = remaining ?? TIMER_SECONDS
+  const emptyPct = (1 - r / TIMER_SECONDS) * 100
   const filled = player === 1 ? '#f97316' : '#22d3ee'
   const empty = player === 1 ? '#fed7aa' : '#cffafe'
   const textColor = player === 1 ? '#431407' : '#042f2e'
-  const seconds = Math.ceil(remaining)
+  const seconds = Math.ceil(r)
   return (
     <div style={{
-      width: 100, height: 115,
+      width: 140, height: 162,
       clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)',
       background: `conic-gradient(from -90deg, ${empty} 0% ${emptyPct}%, ${filled} ${emptyPct}% 100%)`,
       display: 'flex', alignItems: 'center', justifyContent: 'center',
     }}>
-      <span style={{ fontSize: '2.8rem', fontWeight: 900, color: textColor, lineHeight: 1, userSelect: 'none' }}>
+      <span style={{ fontSize: '3.8rem', fontWeight: 900, color: textColor, lineHeight: 1, userSelect: 'none' }}>
         {seconds}
       </span>
     </div>
@@ -94,14 +95,14 @@ export default function PublicPage() {
           </div>
         ) : (
           <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
-            <div style={{ width: 100, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-              {countdown !== null && gameState.activePlayer === 1 && (
+            <div style={{ width: 140, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              {gameState.activeField !== null && gameState.activePlayer === 1 && (
                 <TimerHex remaining={countdown} player={1} />
               )}
             </div>
             <HexBoard gameState={gameState} />
-            <div style={{ width: 100, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-              {countdown !== null && gameState.activePlayer === 2 && (
+            <div style={{ width: 140, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              {gameState.activeField !== null && gameState.activePlayer === 2 && (
                 <TimerHex remaining={countdown} player={2} />
               )}
             </div>
