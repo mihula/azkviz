@@ -4,6 +4,39 @@ import HexBoard from '../components/HexBoard'
 import PinGate from '../components/PinGate'
 import { Question, Round } from 'azkivz-shared'
 
+function OfferPhaseButtons({ activePlayer, player1Name, player2Name, onSteal, onMarkUnanswered }: {
+  activePlayer: 1 | 2
+  player1Name: string
+  player2Name: string
+  onSteal: (player: 1 | 2) => void
+  onMarkUnanswered: () => void
+}) {
+  const opponentPlayer = activePlayer === 1 ? 2 : 1
+  const opponentName = opponentPlayer === 1 ? (player1Name || 'Hráč 1') : (player2Name || 'Hráč 2')
+  const opponentBg = opponentPlayer === 1
+    ? 'linear-gradient(135deg, #f97316, #c2410c)'
+    : 'linear-gradient(135deg, #22d3ee, #0e7490)'
+  const opponentColor = opponentPlayer === 1 ? 'white' : '#042f2e'
+  const opponentEmoji = opponentPlayer === 1 ? '🟠' : '🔵'
+  return (
+    <>
+      <div style={{ fontSize: '0.8rem', color: '#94a3b8', textAlign: 'center', padding: '4px 0' }}>
+        Chce odpovídat {opponentName}?
+      </div>
+      <button
+        onClick={() => onSteal(opponentPlayer)}
+        style={{ width: '100%', padding: 12, border: 'none', borderRadius: 10, background: opponentBg, color: opponentColor, fontWeight: 700, cursor: 'pointer', fontSize: '0.9rem' }}>
+        {opponentEmoji} {opponentName} odpověděl správně
+      </button>
+      <button
+        onClick={onMarkUnanswered}
+        style={{ width: '100%', padding: 12, borderRadius: 10, border: '1px solid rgba(245,158,11,0.3)', background: 'rgba(245,158,11,0.07)', color: '#fbbf24', fontWeight: 600, cursor: 'pointer', fontSize: '0.9rem' }}>
+        ✗ Nikdo neuhodl
+      </button>
+    </>
+  )
+}
+
 export default function ModeratorPage() {
   const [token, setToken] = useState<string | null>(() => localStorage.getItem('mod_token'))
   const { gameState, socket } = useGameSocket(token ?? undefined)
@@ -194,21 +227,13 @@ export default function ModeratorPage() {
                 </>
               ) : offerPhase ? (
                 // Nabídka soupeři
-                <>
-                  <div style={{ fontSize: '0.8rem', color: '#94a3b8', textAlign: 'center', padding: '4px 0' }}>
-                    Chce odpovídat {gameState.activePlayer === 1 ? gameState.player2Name || 'Hráč 2' : gameState.player1Name || 'Hráč 1'}?
-                  </div>
-                  <button
-                    onClick={() => { socket?.emit('moderator:stealField', { player: (gameState.activePlayer === 1 ? 2 : 1) as 1 | 2 }); setQuestion(null); setOfferPhase(false) }}
-                    style={{ width: '100%', padding: 12, border: 'none', borderRadius: 10, background: 'linear-gradient(135deg, #22d3ee, #0e7490)', color: '#042f2e', fontWeight: 700, cursor: 'pointer', fontSize: '0.9rem' }}>
-                    ✓ Soupeř odpověděl správně
-                  </button>
-                  <button
-                    onClick={() => { socket?.emit('moderator:markUnanswered'); setQuestion(null); setOfferPhase(false) }}
-                    style={{ width: '100%', padding: 12, borderRadius: 10, border: '1px solid rgba(245,158,11,0.3)', background: 'rgba(245,158,11,0.07)', color: '#fbbf24', fontWeight: 600, cursor: 'pointer', fontSize: '0.9rem' }}>
-                    ✗ Nikdo neuhodl
-                  </button>
-                </>
+                <OfferPhaseButtons
+                  activePlayer={gameState.activePlayer as 1 | 2}
+                  player1Name={gameState.player1Name}
+                  player2Name={gameState.player2Name}
+                  onSteal={(player) => { socket?.emit('moderator:stealField', { player }); setQuestion(null); setOfferPhase(false) }}
+                  onMarkUnanswered={() => { socket?.emit('moderator:markUnanswered'); setQuestion(null); setOfferPhase(false) }}
+                />
               ) : (
                 // Normální otázka — fáze 1
                 <>
