@@ -11,7 +11,7 @@ model Question {
   id         Int      @id @default(autoincrement())
   text       String
   answer     String
-  answerHint String
+  answerHint String @default("")
   createdAt  DateTime @default(now())
 }
 
