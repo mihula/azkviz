@@ -4,6 +4,7 @@ import path from 'path'
 import authRouter from './routes/auth'
 import questionsRouter from './routes/questions'
 import gameRouter from './routes/game'
+import yesnoRouter from './routes/yesno'
 
 export function createApp(): Application {
   const app = express()
@@ -11,6 +12,7 @@ export function createApp(): Application {
   app.use(express.json({ limit: '2mb' }))
 
   app.use('/api/auth', authRouter)
+  app.use('/api/questions/yesno', yesnoRouter)
   app.use('/api/questions', questionsRouter)
   app.use('/api/game', gameRouter)
 
