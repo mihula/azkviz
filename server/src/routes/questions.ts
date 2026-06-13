@@ -5,6 +5,7 @@ import {
   createQuestion,
   updateQuestion,
   deleteQuestion,
+  deleteAllQuestions,
   importQuestions,
   getQuestionByAssignment,
 } from '../services/questionService'
@@ -49,6 +50,11 @@ router.post('/import', async (req, res) => {
 router.put('/:id', async (req, res) => {
   const q = await updateQuestion(Number(req.params.id), req.body)
   res.json(q)
+})
+
+router.delete('/all', async (_req, res) => {
+  const count = await deleteAllQuestions()
+  res.json({ deleted: count })
 })
 
 router.delete('/:id', async (req, res) => {

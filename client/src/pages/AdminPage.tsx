@@ -61,6 +61,13 @@ export default function AdminPage() {
     fetchQuestions()
   }
 
+  async function handleDeleteAll() {
+    if (!confirm(`Smazat všech ${questions.length} otázek? Tato akce je nevratná.`)) return
+    const res = await fetch('/api/questions/all', { method: 'DELETE', headers: authHeaders })
+    if (!res.ok) { alert('Smazání selhalo'); return }
+    fetchQuestions()
+  }
+
   async function handleImport() {
     setImportStatus('Importuji…')
     try {
@@ -134,6 +141,11 @@ export default function AdminPage() {
             <button onClick={() => setActiveTab('questions')} style={{ padding: '6px 16px', borderRadius: 8, border: 'none', background: activeTab === 'questions' ? 'linear-gradient(135deg, #f97316, #c2410c)' : 'rgba(255,255,255,0.06)', color: activeTab === 'questions' ? 'white' : '#64748b', fontWeight: 600, cursor: 'pointer', fontSize: '0.85rem' }}>
               Otázky ({questions.length})
             </button>
+            {activeTab === 'questions' && questions.length > 0 && (
+              <button onClick={handleDeleteAll} style={{ padding: '6px 14px', borderRadius: 8, border: '1px solid rgba(239,68,68,0.3)', background: 'rgba(239,68,68,0.08)', color: '#f87171', fontWeight: 600, cursor: 'pointer', fontSize: '0.82rem' }}>
+                🗑 Smazat vše
+              </button>
+            )}
             <button onClick={() => setActiveTab('yesno')} style={{ padding: '6px 16px', borderRadius: 8, border: 'none', background: activeTab === 'yesno' ? 'linear-gradient(135deg, #f59e0b, #b45309)' : 'rgba(255,255,255,0.06)', color: activeTab === 'yesno' ? 'white' : '#64748b', fontWeight: 600, cursor: 'pointer', fontSize: '0.85rem' }}>
               Ano/Ne ({yesnoQuestions.length})
             </button>

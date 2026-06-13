@@ -61,6 +61,11 @@ export async function deleteQuestion(id: number): Promise<void> {
   await prisma.question.delete({ where: { id } })
 }
 
+export async function deleteAllQuestions(): Promise<number> {
+  const result = await prisma.question.deleteMany()
+  return result.count
+}
+
 export async function importQuestions(items: QuestionInput[]): Promise<number> {
   const data = items.map((item) => ({
     text: item.text,
