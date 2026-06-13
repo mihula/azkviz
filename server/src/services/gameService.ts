@@ -45,7 +45,14 @@ export async function startGame(
   for (let f = 1; f <= 28; f++) {
     if (round === 'LETTERS') {
       const letter = LETTERS_MAP[f]
-      const matching = questions.filter(q => q.answer.toLowerCase().startsWith(letter.toLowerCase()))
+      const letterLower = letter.toLowerCase()
+      const matching = questions.filter(q => {
+        const a = q.answer.toLowerCase()
+        if (!a.startsWith(letterLower)) return false
+        // 'C' must not match 'Ch' answers (Ch is a separate Czech letter)
+        if (letterLower === 'c' && a.startsWith('ch')) return false
+        return true
+      })
       const pool = matching.length > 0 ? matching : questions
       assignments[String(f)] = pool[Math.floor(Math.random() * pool.length)].id
     } else {
