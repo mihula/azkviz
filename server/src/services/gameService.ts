@@ -1,5 +1,5 @@
 import prisma from '../lib/prisma'
-import { GameState, Round } from 'azkivz-shared'
+import { GameState, Round, LETTERS_MAP } from 'azkivz-shared'
 import { checkWin } from './winChecker'
 
 function parseState(raw: any): GameState {
@@ -38,12 +38,19 @@ export async function startGame(
   player2Name: string,
   round: Round
 ): Promise<GameState> {
-  const questions = await prisma.question.findMany({ select: { id: true } })
+  const questions = await prisma.question.findMany({ select: { id: true, answer: true } })
   if (questions.length === 0) throw new Error('No questions in database')
 
   const assignments: Record<string, number> = {}
   for (let f = 1; f <= 28; f++) {
-    assignments[String(f)] = questions[Math.floor(Math.random() * questions.length)].id
+    if (round === 'LETTERS') {
+      const letter = LETTERS_MAP[f]
+      const matching = questions.filter(q => q.answer.toLowerCase().startsWith(letter.toLowerCase()))
+      const pool = matching.length > 0 ? matching : questions
+      assignments[String(f)] = pool[Math.floor(Math.random() * pool.length)].id
+    } else {
+      assignments[String(f)] = questions[Math.floor(Math.random() * questions.length)].id
+    }
   }
 
   const raw = await prisma.gameState.update({
