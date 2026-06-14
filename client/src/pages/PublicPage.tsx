@@ -275,7 +275,7 @@ export default function PublicPage() {
                       textAlign: 'center',
                       padding: '0 8%',
                     }}>
-                      {chip.showHint ? (chip.hint ?? '?') : chipLabel}
+                      {chip.showHint ? (chip.hint && chip.hint !== '0' ? chip.hint : '?') : chipLabel}
                     </span>
                   </div>
                 </div>
