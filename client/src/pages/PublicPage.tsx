@@ -265,17 +265,6 @@ export default function PublicPage() {
               </div>
             </div>
 
-            {/* Dark overlay — dims non-winner fields on FINISHED */}
-            {gameState.status === 'FINISHED' && (
-              <div style={{
-                position: 'absolute', inset: 0,
-                background: 'rgba(0,0,0,0.68)',
-                zIndex: 15,
-                pointerEvents: 'none',
-                animation: 'winner-overlay-in 0.6s ease-out',
-              }} />
-            )}
-
             {/* Chip overlay — always rendered so ref is valid */}
             <div
               ref={overlayRef}
