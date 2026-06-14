@@ -1,11 +1,34 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useGameSocket } from '../hooks/useGameSocket'
 import HexBoard, { calcHexSize } from '../components/HexBoard'
 import { LETTERS_MAP } from 'azkivz-shared'
 import type { Round } from 'azkivz-shared'
 
 const TIMER_SECONDS = 10
-const FLIP_MS = 700
+
+// Chip animation timing (ms)
+const FLY_OUT_MS = 480
+const FOLD_MS = 240
+const UNFOLD_MS = 240
+const FOLD_BACK_MS = 160
+const UNFOLD_BACK_MS = 160
+const RETURN_MS = 420
+
+interface ChipState {
+  fieldNumber: number
+  round: Round
+  player: 1 | 2 | null
+  hint: string | null
+  hexTx: number  // translation from overlay center → hex center
+  hexTy: number
+  tx: number
+  ty: number
+  outerScale: number
+  outerTransition: string
+  innerScaleX: number
+  innerTransition: string
+  showHint: boolean
+}
 
 function useCountdown(timerStartedAt: string | null): number | null {
   const [remaining, setRemaining] = useState<number | null>(null)
@@ -48,80 +71,124 @@ function TimerHex({ remaining, player }: { remaining: number | null; player: 1 |
   )
 }
 
-function FlipHex({
-  fieldNumber, round, hint, player, hexH, hexW, fontSize,
-}: {
-  fieldNumber: number
-  round: Round
-  hint: string | null
-  player: 1 | 2 | null
-  hexH: number
-  hexW: number
-  fontSize: number
-}) {
-  const [showHint, setShowHint] = useState(false)
-
-  useEffect(() => {
-    const t = setTimeout(() => setShowHint(true), Math.round(FLIP_MS * 0.43))
-    return () => clearTimeout(t)
-  }, [])
-
-  const label = round === 'LETTERS' ? LETTERS_MAP[fieldNumber] : String(fieldNumber)
-
-  const frontBg = 'linear-gradient(160deg, #fef08a 0%, #fbbf24 55%, #d97706 100%)'
-  const backBg = player === 2
-    ? 'linear-gradient(160deg, #a5f3fc 0%, #22d3ee 55%, #0e7490 100%)'
-    : 'linear-gradient(160deg, #fdba74 0%, #f97316 55%, #c2410c 100%)'
-  const backTextColor = player === 2 ? '#042f2e' : 'white'
-
-  const glowColor = showHint
-    ? (player === 2 ? 'rgba(34,211,238,0.85)' : 'rgba(249,115,22,0.85)')
-    : 'rgba(251,191,36,0.95)'
-
-  const hintFontSize = Math.floor(hexH * (hint && hint.length > 4 ? 0.22 : 0.3))
-
-  return (
-    <div style={{ animation: `flip-scale-up ${FLIP_MS}ms ease-out forwards` }}>
-      <div style={{
-        width: hexW,
-        height: hexH,
-        clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)',
-        background: showHint ? backBg : frontBg,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        filter: `drop-shadow(0 0 28px ${glowColor}) drop-shadow(0 18px 40px rgba(0,0,0,0.85))`,
-        animation: showHint
-          ? `flip-unfold ${Math.round(FLIP_MS * 0.57)}ms ease-out forwards`
-          : `flip-fold ${Math.round(FLIP_MS * 0.43)}ms ease-in forwards`,
-      }}>
-        <span style={{
-          fontSize: showHint ? hintFontSize : fontSize,
-          fontWeight: 900,
-          color: showHint ? backTextColor : '#1c0f00',
-          lineHeight: 1,
-          userSelect: 'none',
-          letterSpacing: showHint ? '0.06em' : '0',
-          textAlign: 'center',
-          padding: '0 8%',
-        }}>
-          {showHint ? (hint ?? '?') : label}
-        </span>
-      </div>
-    </div>
-  )
-}
-
 export default function PublicPage() {
   const { gameState, connected } = useGameSocket()
   const countdown = useCountdown(gameState.timerStartedAt)
   const [hexSize, setHexSize] = useState(() => calcHexSize(false))
+  const [chip, setChip] = useState<ChipState | null>(null)
+
+  const boardRef = useRef<HTMLDivElement>(null)
+  const overlayRef = useRef<HTMLDivElement>(null)
+  const chipRef = useRef<ChipState | null>(null)
+  chipRef.current = chip
 
   useEffect(() => {
     const handle = () => setHexSize(calcHexSize(false))
     window.addEventListener('resize', handle)
     return () => window.removeEventListener('resize', handle)
   }, [])
+
+  useEffect(() => {
+    const timers: ReturnType<typeof setTimeout>[] = []
+    const t = (fn: () => void, ms: number) => { timers.push(setTimeout(fn, ms)) }
+
+    if (gameState.activeField !== null) {
+      const fieldNumber = gameState.activeField
+      const hexEl = boardRef.current?.querySelector(`[data-field="${fieldNumber}"]`) as HTMLElement | null
+      const overlayEl = overlayRef.current
+
+      if (hexEl && overlayEl) {
+        const hexR = hexEl.getBoundingClientRect()
+        const ovR = overlayEl.getBoundingClientRect()
+        const hexTx = (hexR.left + hexR.width / 2) - (ovR.left + ovR.width / 2)
+        const hexTy = (hexR.top + hexR.height / 2) - (ovR.top + ovR.height / 2)
+
+        // Mount chip at hex position instantly (no transition)
+        setChip({
+          fieldNumber,
+          round: gameState.round,
+          player: gameState.activePlayer,
+          hint: gameState.activeFieldHint,
+          hexTx, hexTy,
+          tx: hexTx, ty: hexTy, outerScale: 1,
+          outerTransition: 'none',
+          innerScaleX: 1, innerTransition: 'none',
+          showHint: false,
+        })
+
+        // After 2 frames: fly to center + fold
+        t(() => {
+          setChip(c => c?.fieldNumber === fieldNumber ? {
+            ...c,
+            tx: 0, ty: 0, outerScale: 1.5,
+            outerTransition: `transform ${FLY_OUT_MS}ms cubic-bezier(0.4, 0, 0.2, 1)`,
+            innerScaleX: 0,
+            innerTransition: `transform ${FOLD_MS}ms ease-in`,
+          } : c)
+        }, 20)
+
+        // At fold midpoint: swap content, unfold
+        t(() => {
+          setChip(c => c?.fieldNumber === fieldNumber ? {
+            ...c,
+            showHint: true,
+            innerScaleX: 1,
+            innerTransition: `transform ${UNFOLD_MS}ms ease-out`,
+          } : c)
+        }, 20 + FOLD_MS)
+      }
+
+    } else if (chipRef.current !== null) {
+      // Field deselected — fold back, fly home
+
+      // Fold (hint → number)
+      setChip(c => c ? {
+        ...c,
+        innerScaleX: 0,
+        innerTransition: `transform ${FOLD_BACK_MS}ms ease-in`,
+      } : null)
+
+      // Swap content at fold midpoint
+      t(() => {
+        setChip(c => c ? {
+          ...c,
+          showHint: false,
+          innerScaleX: 1,
+          innerTransition: `transform ${UNFOLD_BACK_MS}ms ease-out`,
+        } : null)
+      }, FOLD_BACK_MS)
+
+      // Fly back to hex position
+      t(() => {
+        setChip(c => c ? {
+          ...c,
+          tx: c.hexTx, ty: c.hexTy, outerScale: 1,
+          outerTransition: `transform ${RETURN_MS}ms cubic-bezier(0.4, 0, 0.2, 1)`,
+        } : null)
+      }, FOLD_BACK_MS + UNFOLD_BACK_MS)
+
+      // Remove chip after landing
+      t(() => setChip(null), FOLD_BACK_MS + UNFOLD_BACK_MS + RETURN_MS)
+    }
+
+    return () => timers.forEach(clearTimeout)
+  }, [gameState.activeField])
+
+  const { hexW, hexH, fontSize } = hexSize
+
+  // Chip visual properties
+  const chipFrontBg = 'linear-gradient(160deg, #fef08a 0%, #fbbf24 55%, #d97706 100%)'
+  const chipBackBg = chip?.player === 2
+    ? 'linear-gradient(160deg, #a5f3fc 0%, #22d3ee 55%, #0e7490 100%)'
+    : 'linear-gradient(160deg, #fdba74 0%, #f97316 55%, #c2410c 100%)'
+  const chipBackText = chip?.player === 2 ? '#042f2e' : 'white'
+  const chipGlow = chip?.showHint
+    ? (chip.player === 2 ? 'rgba(34,211,238,0.85)' : 'rgba(249,115,22,0.85)')
+    : 'rgba(251,191,36,0.95)'
+  const chipHintFontSize = Math.floor(hexH * (chip?.hint && chip.hint.length > 4 ? 0.22 : 0.3))
+  const chipLabel = chip
+    ? (chip.round === 'LETTERS' ? LETTERS_MAP[chip.fieldNumber] : String(chip.fieldNumber))
+    : ''
 
   return (
     <div style={{
@@ -164,7 +231,11 @@ export default function PublicPage() {
                   <TimerHex remaining={countdown} player={1} />
                 )}
               </div>
-              <HexBoard gameState={gameState} />
+              <HexBoard
+                gameState={gameState}
+                containerRef={boardRef}
+                hiddenField={chip?.fieldNumber ?? null}
+              />
               <div style={{ width: 140, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 {gameState.activeField !== null && gameState.activePlayer === 2 && (
                   <TimerHex remaining={countdown} player={2} />
@@ -172,28 +243,44 @@ export default function PublicPage() {
               </div>
             </div>
 
-            {gameState.activeField !== null && (
-              <div style={{
-                position: 'absolute',
-                inset: 0,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                zIndex: 50,
-                pointerEvents: 'none',
-              }}>
-                <FlipHex
-                  key={gameState.activeField}
-                  fieldNumber={gameState.activeField}
-                  round={gameState.round}
-                  hint={gameState.activeFieldHint}
-                  player={gameState.activePlayer}
-                  hexH={hexSize.hexH}
-                  hexW={hexSize.hexW}
-                  fontSize={hexSize.fontSize}
-                />
-              </div>
-            )}
+            {/* Chip overlay — always rendered so overlayRef is always valid */}
+            <div
+              ref={overlayRef}
+              style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 50, pointerEvents: 'none' }}
+            >
+              {chip && (
+                <div style={{
+                  transform: `translate(${chip.tx}px, ${chip.ty}px) scale(${chip.outerScale})`,
+                  transition: chip.outerTransition,
+                }}>
+                  <div style={{
+                    width: hexW,
+                    height: hexH,
+                    clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)',
+                    background: chip.showHint ? chipBackBg : chipFrontBg,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    filter: `drop-shadow(0 0 28px ${chipGlow}) drop-shadow(0 18px 40px rgba(0,0,0,0.85))`,
+                    transform: `scaleX(${chip.innerScaleX})`,
+                    transition: chip.innerTransition,
+                  }}>
+                    <span style={{
+                      fontSize: chip.showHint ? chipHintFontSize : fontSize,
+                      fontWeight: 900,
+                      color: chip.showHint ? chipBackText : '#1c0f00',
+                      lineHeight: 1,
+                      userSelect: 'none',
+                      letterSpacing: chip.showHint ? '0.06em' : '0',
+                      textAlign: 'center',
+                      padding: '0 8%',
+                    }}>
+                      {chip.showHint ? (chip.hint ?? '?') : chipLabel}
+                    </span>
+                  </div>
+                </div>
+              )}
+            </div>
           </>
         )}
       </div>

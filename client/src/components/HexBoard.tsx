@@ -1,11 +1,13 @@
 import { GameState } from 'azkivz-shared'
 import HexCell from './HexCell'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, RefObject } from 'react'
 
 interface HexBoardProps {
   gameState: GameState
   onFieldClick?: (fieldNumber: number) => void
   compact?: boolean
+  containerRef?: RefObject<HTMLDivElement>
+  hiddenField?: number | null
 }
 
 export function calcHexSize(compact: boolean) {
@@ -21,7 +23,7 @@ export function calcHexSize(compact: boolean) {
   return { hexW: Math.floor(hexH * 0.866), hexH, gap: GAP, fontSize: Math.floor(hexH * 0.44) }
 }
 
-export default function HexBoard({ gameState, onFieldClick, compact = false }: HexBoardProps) {
+export default function HexBoard({ gameState, onFieldClick, compact = false, containerRef, hiddenField }: HexBoardProps) {
   const [size, setSize] = useState(() => calcHexSize(compact))
 
   useEffect(() => {
@@ -52,7 +54,7 @@ export default function HexBoard({ gameState, onFieldClick, compact = false }: H
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <div ref={containerRef} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       {rows.map((row, ri) => (
         <div
           key={ri}
@@ -69,7 +71,7 @@ export default function HexBoard({ gameState, onFieldClick, compact = false }: H
               round={gameState.round}
               state={cellState(f)}
               onClick={onFieldClick}
-              style={{ width: hexW, height: hexH, fontSize }}
+              style={{ width: hexW, height: hexH, fontSize, ...(f === hiddenField ? { opacity: 0, pointerEvents: 'none' } : {}) }}
             />
           ))}
         </div>
