@@ -29,6 +29,59 @@ interface ChipState {
   showHint: boolean
 }
 
+const IDLE_LABELS: Record<number, string> = {
+  2: 'Z', 3: 'A',
+  11: 'CH', 12: 'V', 13: 'Í', 14: 'L', 15: 'I',
+  22: 'Z', 23: 'A', 24: 'Č', 25: 'N', 26: 'E', 27: 'M', 28: 'E',
+}
+const IDLE_ANIM_FIELDS = new Set([1, 4, 5, 6, 7, 8, 9, 10, 16, 17, 18, 19, 20, 21])
+const IDLE_ANIM_ORDER = [1, 4, 5, 6, 7, 8, 9, 10, 16, 17, 18, 19, 20, 21]
+
+function IdleBoard() {
+  const [size, setSize] = useState(() => calcHexSize(false))
+  useEffect(() => {
+    const handle = () => setSize(calcHexSize(false))
+    window.addEventListener('resize', handle)
+    return () => window.removeEventListener('resize', handle)
+  }, [])
+  const { hexW, hexH, gap, fontSize } = size
+  const overlap = Math.max(0, Math.floor(hexH * 0.25 - gap / 0.866))
+  const ANIM_DUR = 3.2
+  const rows: number[][] = []
+  let f = 1
+  for (let r = 0; r < 7; r++) {
+    const row: number[] = []
+    for (let c = 0; c <= r; c++) row.push(f++)
+    rows.push(row)
+  }
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      {rows.map((row, ri) => (
+        <div key={ri} style={{ display: 'flex', gap: `${gap}px`, marginTop: ri === 0 ? 0 : `-${overlap}px` }}>
+          {row.map((field) => {
+            const isAnim = IDLE_ANIM_FIELDS.has(field)
+            const label = IDLE_LABELS[field] ?? ''
+            const delay = isAnim ? ((IDLE_ANIM_ORDER.indexOf(field) * 0.22) % ANIM_DUR).toFixed(2) : '0'
+            const fs = label.length > 1 ? Math.floor(hexH * 0.3) : fontSize
+            return (
+              <div
+                key={field}
+                className="hex free"
+                style={{
+                  width: hexW, height: hexH, fontSize: fs,
+                  ...(isAnim ? { animation: `idle-hex ${ANIM_DUR}s ease-in-out ${delay}s infinite` } : {}),
+                }}
+              >
+                {label}
+              </div>
+            )
+          })}
+        </div>
+      ))}
+    </div>
+  )
+}
+
 // BFS to find the winning connected component (mirrors server winChecker)
 const ROW_STARTS = [0, 1, 3, 6, 10, 15, 21]
 const LEFT_EDGE  = new Set([1, 2, 4, 7, 11, 16, 22])
@@ -229,20 +282,13 @@ export default function PublicPage() {
         <div style={{ fontSize: '1.8rem', fontWeight: 900, background: 'linear-gradient(135deg, #f97316, #fbbf24)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
           AZkvíz
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 20, padding: '4px 14px', fontSize: '0.85rem', color: '#94a3b8' }}>
-          <span style={{ display: 'inline-block', width: 7, height: 7, borderRadius: '50%', background: connected ? '#22c55e' : '#ef4444', boxShadow: connected ? '0 0 6px #22c55e' : 'none' }} />
-          {gameState.round === 'NUMBERS' ? 'Čísla' : 'Písmena'}
-        </div>
-        <div style={{ width: 56 }} />
+        <span style={{ display: 'inline-block', width: 8, height: 8, borderRadius: '50%', background: connected ? '#22c55e' : '#ef4444', boxShadow: connected ? '0 0 6px #22c55e' : 'none' }} />
       </div>
 
       {/* Board area */}
       <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', minHeight: 0, position: 'relative' }}>
         {gameState.status === 'WAITING' ? (
-          <div style={{ color: '#475569', fontSize: '1.2rem', textAlign: 'center' }}>
-            <div style={{ fontSize: '3rem', marginBottom: 12 }}>⏳</div>
-            Hra ještě nezačala…
-          </div>
+          <IdleBoard />
         ) : (
           <>
             {/* Board — visible during PLAYING and FINISHED */}
