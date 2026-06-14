@@ -9,9 +9,9 @@ interface HexBoardProps {
 }
 
 function calcHexSize(compact: boolean) {
-  if (compact) return { hexW: 52, hexH: 60, gap: 3, fontSize: 20 }
-  if (typeof window === 'undefined') return { hexW: 52, hexH: 60, gap: 3, fontSize: 20 }
-  const GAP = 5
+  if (compact) return { hexW: 52, hexH: 60, gap: 6, fontSize: 20 }
+  if (typeof window === 'undefined') return { hexW: 52, hexH: 60, gap: 6, fontSize: 20 }
+  const GAP = 10
   const nonBoardH = 168
   const availH = window.innerHeight - nonBoardH
   const availW = window.innerWidth - 352  // subtract timer hex placeholders (2 × 140 + 2 × 24 gap + 24 outer padding)
