@@ -8,6 +8,7 @@ interface HexBoardProps {
   compact?: boolean
   containerRef?: RefObject<HTMLDivElement>
   hiddenField?: number | null
+  winningFields?: number[]
 }
 
 export function calcHexSize(compact: boolean) {
@@ -23,7 +24,7 @@ export function calcHexSize(compact: boolean) {
   return { hexW: Math.floor(hexH * 0.866), hexH, gap: GAP, fontSize: Math.floor(hexH * 0.44) }
 }
 
-export default function HexBoard({ gameState, onFieldClick, compact = false, containerRef, hiddenField }: HexBoardProps) {
+export default function HexBoard({ gameState, onFieldClick, compact = false, containerRef, hiddenField, winningFields }: HexBoardProps) {
   const [size, setSize] = useState(() => calcHexSize(compact))
 
   useEffect(() => {
@@ -64,16 +65,26 @@ export default function HexBoard({ gameState, onFieldClick, compact = false, con
             marginTop: ri === 0 ? 0 : `-${overlap}px`,
           }}
         >
-          {row.map((f) => (
-            <HexCell
-              key={f}
-              fieldNumber={f}
-              round={gameState.round}
-              state={cellState(f)}
-              onClick={onFieldClick}
-              style={{ width: hexW, height: hexH, fontSize, ...(f === hiddenField ? { opacity: 0, pointerEvents: 'none' } : {}) }}
-            />
-          ))}
+          {row.map((f) => {
+            const isWin = (winningFields?.length ?? 0) > 0 && winningFields!.includes(f)
+            const winAnim = isWin
+              ? `${gameState.claimedP1.includes(f) ? 'winner-pulse-p1' : 'winner-pulse-p2'} 1.5s ease-in-out infinite`
+              : undefined
+            return (
+              <HexCell
+                key={f}
+                fieldNumber={f}
+                round={gameState.round}
+                state={cellState(f)}
+                onClick={onFieldClick}
+                style={{
+                  width: hexW, height: hexH, fontSize,
+                  ...(f === hiddenField ? { opacity: 0, pointerEvents: 'none' as const } : {}),
+                  ...(isWin ? { transform: 'scale(1.15) translateY(-6px)', zIndex: 30, animation: winAnim } : {}),
+                }}
+              />
+            )
+          })}
         </div>
       ))}
     </div>

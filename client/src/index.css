@@ -55,6 +55,23 @@ body {
 }
 
 
+@keyframes winner-pulse-p1 {
+  0%,100% { filter: drop-shadow(0 0 14px rgba(249,115,22,.9)) drop-shadow(0 0 30px rgba(249,115,22,.5)); }
+  50%      { filter: drop-shadow(0 0 32px rgba(249,115,22,1))  drop-shadow(0 0 56px rgba(249,115,22,.8)); }
+}
+@keyframes winner-pulse-p2 {
+  0%,100% { filter: drop-shadow(0 0 14px rgba(34,211,238,.9)) drop-shadow(0 0 30px rgba(34,211,238,.5)); }
+  50%      { filter: drop-shadow(0 0 32px rgba(34,211,238,1))  drop-shadow(0 0 56px rgba(34,211,238,.8)); }
+}
+@keyframes winner-overlay-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes winner-text-in {
+  from { opacity: 0; transform: scale(0.6); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
 body::before {
   content: '';
   position: fixed; inset: 0;
