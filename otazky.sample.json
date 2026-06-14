@@ -1,226 +1,203 @@
 [
-  {
-    "text": "Která hora je nejvyšší na světě?",
-    "answer": "Everest"
-  },
-  {
-    "text": "Kolik planet je ve Sluneční soustavě?",
-    "answer": "8"
-  },
-  {
-    "text": "Jak se jmenuje hlavní město Francie?",
-    "answer": "Paříž"
-  },
-  {
-    "text": "Jaký je chemický vzorec vody?",
-    "answer": "H₂O"
-  },
-  {
-    "text": "Která řeka je nejdelší na světě?",
-    "answer": "Nil"
-  },
-  {
-    "text": "Jak se jmenuje největší oceán světa?",
-    "answer": "Tichý oceán"
-  },
-  {
-    "text": "Kolik hodin má jeden den?",
-    "answer": "24"
-  },
-  {
-    "text": "Jak se jmenuje hlavní město Německa?",
-    "answer": "Berlín"
-  },
-  {
-    "text": "Které zvíře je nejrychlejší na světě?",
-    "answer": "Gepard"
-  },
-  {
-    "text": "Kolik centimetrů má jeden metr?",
-    "answer": "100"
-  },
-  {
-    "text": "Jak se jmenuje planeta nejblíže Slunci?",
-    "answer": "Merkur"
-  },
-  {
-    "text": "Jak se jmenuje hlavní město Itálie?",
-    "answer": "Řím"
-  },
-  {
-    "text": "Kolik noh má pavouk?",
-    "answer": "8"
-  },
-  {
-    "text": "Jak se jmenuje největší světadíl?",
-    "answer": "Asie"
-  },
-  {
-    "text": "Jak se jmenuje největší planeta Sluneční soustavy?",
-    "answer": "Jupiter"
-  },
-  {
-    "text": "Jak se jmenuje hlavní město Španělska?",
-    "answer": "Madrid"
-  },
-  {
-    "text": "Která barva vznikne smícháním modré a žluté?",
-    "answer": "Zelená"
-  },
-  {
-    "text": "Kolik minut má jedna hodina?",
-    "answer": "60"
-  },
-  {
-    "text": "Který savec umí létat?",
-    "answer": "Netopýr"
-  },
-  {
-    "text": "Jak se jmenuje nejdelší řeka v Evropě?",
-    "answer": "Volha"
-  },
-  {
-    "text": "Kolik dní má únor v přestupném roce?",
-    "answer": "29"
-  },
-  {
-    "text": "Jak se jmenuje hlavní město Japonska?",
-    "answer": "Tokio"
-  },
-  {
-    "text": "Kolik kilogramů je v jedné tuně?",
-    "answer": "1000"
-  },
-  {
-    "text": "Které zvíře je největší na světě?",
-    "answer": "Modrá velryba"
-  },
-  {
-    "text": "Jak se jmenuje hlavní město Austrálie?",
-    "answer": "Canberra"
-  },
-  {
-    "text": "Kolik stran má krychle?",
-    "answer": "6"
-  },
-  {
-    "text": "Který orgán v těle čerpá krev?",
-    "answer": "Srdce"
-  },
-  {
-    "text": "Na které řece leží Praha?",
-    "answer": "Vltava"
-  },
-  {
-    "text": "Které zvíře má nejdelší krk?",
-    "answer": "Žirafa"
-  },
-  {
-    "text": "Kolik hráčů nastupuje do fotbalu na hřiště za jeden tým?",
-    "answer": "11"
-  },
-  {
-    "text": "Jak se jmenuje hlavní město Velké Británie?",
-    "answer": "Londýn"
-  },
-  {
-    "text": "Jak se jmenuje nejmenší kontinent?",
-    "answer": "Austrálie"
-  },
-  {
-    "text": "Kolik dní má týden?",
-    "answer": "7"
-  },
-  {
-    "text": "Na jakém kontinentu leží Egypt?",
-    "answer": "Afrika"
-  },
-  {
-    "text": "Co je nejtvrdší přírodní látka na světě?",
-    "answer": "Diamant"
-  },
-  {
-    "text": "Jak se jmenuje měna Spojených států amerických?",
-    "answer": "Dolar"
-  },
-  {
-    "text": "Jak se jmenuje hlavní město Ruska?",
-    "answer": "Moskva"
-  },
-  {
-    "text": "Jak se chemická značka Au – o jaký kov se jedná?",
-    "answer": "Zlato"
-  },
-  {
-    "text": "Kolik barev má duha?",
-    "answer": "7"
-  },
-  {
-    "text": "Jak se jmenuje nejhlubší oceánský příkop světa?",
-    "answer": "Mariánský příkop"
-  },
-  {
-    "text": "Jak se jmenuje hlavní město Polska?",
-    "answer": "Varšava"
-  },
-  {
-    "text": "Jak se jmenuje největší poušť světa?",
-    "answer": "Sahara"
-  },
-  {
-    "text": "Kolik sekund má jedna minuta?",
-    "answer": "60"
-  },
-  {
-    "text": "Kolik očí má pavouk?",
-    "answer": "8"
-  },
-  {
-    "text": "Jak se jmenuje hlavní město Brazílie?",
-    "answer": "Brasília"
-  },
-  {
-    "text": "Jak se jmenuje planeta, která má viditelné prstence?",
-    "answer": "Saturn"
-  },
-  {
-    "text": "Jak se jmenuje nejpomalejší zvíře na světě?",
-    "answer": "Lenochod"
-  },
-  {
-    "text": "Jak se jmenuje hlavní město Egypta?",
-    "answer": "Káhira"
-  },
-  {
-    "text": "Kolik gramů je v jednom kilogramu?",
-    "answer": "1000"
-  },
-  {
-    "text": "Kolik hráčů nastupuje ve volejbale na hřiště za jeden tým?",
-    "answer": "6"
-  },
-  {
-    "text": "Jak se jmenuje hlavní město Číny?",
-    "answer": "Peking"
-  },
-  {
-    "text": "Jak se jmenuje nejhlubší jezero na světě?",
-    "answer": "Bajkal"
-  },
-  {
-    "text": "Kolik noh má včela?",
-    "answer": "6"
-  },
-  {
-    "text": "Jak se jmenuje hvězda, kolem které obíhá Země?",
-    "answer": "Slunce"
-  },
-  {
-    "text": "Jak se jmenuje hlavní město Norska?",
-    "answer": "Oslo"
-  },
-  {
-    "text": "Jak se jmenuje nejdelší zeď na světě?",
-    "answer": "Čínská zeď"
-  }
+  {"text": "Jak se jmenuje největší řeka Jižní Ameriky?", "answer": "Amazonka"},
+  {"text": "Jak se nazývá nejjižnější kontinent na Zemi, pokrytý věčným ledem?", "answer": "Antarktida"},
+  {"text": "Jak se nazývají hory táhnoucí se podél celého západního pobřeží Jižní Ameriky?", "answer": "Andy"},
+  {"text": "Jak se jmenuje kontinent, na němž leží Egypt, Nigérie nebo Keňa?", "answer": "Afrika"},
+  {"text": "Jak se jmenuje největší světadíl?", "answer": "Asie"},
+  {"text": "Jak se jmenuje nejmenší kontinent?","answer": "Austrálie"},
+  { "text": "Ve které zemi se nachází Velká bariérová korálová soustava?", "answer": "Austrálie" },
+  { "text": "Jak se nazývá věda zabývající se hvězdami a vesmírem?", "answer": "Astronomie" },
+  { "text": "Kdo napsal knihu Malý princ?", "answer": "Antoine de Saint-Exupéry" },
+
+  {"text": "Jaké je hlavní město Německa?", "answer": "Berlín"},
+  {"text": "Jaký savec s plochým ocasem staví hráze přes řeky z větví a bláta?", "answer": "Bobr"},
+  {"text": "Jak se nazývá moře na severu Evropy, které omývá pobřeží Švédska, Finska a Polska?", "answer": "Baltské moře"},
+  {"text": "Jak se jmenuje hlavní město Brazílie?","answer": "Brasília"},
+  {"text": "Jak se jmenuje nejhlubší jezero na světě?","answer": "Bajkal"},
+  { "text": "Jaké je hlavní město Maďarska?", "answer": "Budapešť" },
+  { "text": "Jak se jmenuje sport, kde závodníci lyžují a střílí?", "answer": "Biatlon" },
+  { "text": "Jak se nazývá věda zabývající se živými organismy?", "answer": "Biologie" },
+
+  {"text": "Jak se jmenuje hlavní město Austrálie?", "answer": "Canberra"},
+  {"text": "Jak se jmenuje největší město Švýcarska, přestože není jeho hlavním městem?", "answer": "Curych"},
+  {"text": "Jak se řekne slovensky hřbitov?", "answer": "Cintorín"},
+  { "text": "Jaký je chemický vzorec oxidu uhličitého?", "answer": "CO₂" },
+
+  {"text": "Jak se jmenuje dnes již druhý nejlidnatější stát světa?", "answer": "Čína"},
+  {"text": "Jak se nazývá moře ohraničené Rumunskem, Bulharskem, Tureckem a Ruskem?", "answer": "Černé moře"},
+  {"text": "Jak se jmenuje jihoamerický stát na západním pobřeží, jehož hlavním městem je Santiago?", "answer": "Čile"},
+  {"text": "Jak se jmenuje nejdelší zeď na světě?", "answer": "Čínská zeď" },
+
+  {"text": "Jak se jmenuje řeka, která protéká Vídní, Budapeští a Bělehradem?", "answer": "Dunaj"},
+  {"text": "Jak se jmenuje skandinávský stát na poloostrově Jutském, nejjižnější ze severských zemí?", "answer": "Dánsko"},
+  {"text": "Jak se nazývají vyhynulí plazi, kteří ovládali pevninu v druhohorách?", "answer": "Dinosauři"},
+  {"text": "Co je nejtvrdší přírodní látka na světě?", "answer": "Diamant"},
+  {"text": "Jak se jmenuje měna Spojených států amerických?","answer": "Dolar"},
+
+  {"text": "Jak se jmenuje nejvyšší hora světa, nacházející se v Himalájích na hranici Nepálu a Tibetu?", "answer": "Everest"},
+  {"text": "Jak se jmenuje jihoamerický stát pojmenovaný podle zeměpisné linie nultého rovnoběžníku?", "answer": "Ekvádor"},
+  {"text": "Jak se nazývá kontinent, na němž leží Francie, Německo, Itálie a Řecko?", "answer": "Evropa"},
+
+  {"text": "Jak se jmenuje skandinávský stát na jihovýchod od Švédska, který sousedí s Ruskem?", "answer": "Finsko"},
+  {"text": "Jak se jmenuje stát v západní Evropě, jehož vlajka je modrá, bílá a červená a v hlavním městě je například známá Eiffelova věž?", "answer": "Francie"},
+  {"text": "Jak se nazývá biologický děj, při němž zelené rostliny přeměňují sluneční záření a oxid uhličitý na cukr a kyslík?", "answer": "Fotosyntéza"},
+  { "text": "Jak se jmenuje mezinárodní fotbalová organizace?", "answer": "FIFA" },
+  { "text": "Ve které zemi se nachází muzeum Louvre?", "answer": "Francie" },
+
+  {"text": "Jak se nazývá teplý mořský proud v Atlantiku, který ohřívá klima západní Evropy?", "answer": "Golfský proud"},
+  {"text": "Jak se jmenuje největší primát světa, žijící ve skupinách v afrických horských pralesích?", "answer": "Gorila"},
+  {"text": "Jak se nazývá přírodní pramen, ze kterého pravidelně s velkou silou vychrlí horká voda a pára?", "answer": "Gejzír"},
+  {"text": "Které zvíře je nejrychlejší na světě?","answer": "Gepard"},
+  { "text": "Kdo byl první prezident Spojených států amerických (stačí příjmení)?", "answer": "George Washington" },
+
+  {"text": "Jak se jmenuje horský systém na jihu Asie, kde se nacházejí nejvyšší hory světa?", "answer": "Himaláje"},
+  {"text": "Jak se jmenuje velký africký savec s holou šedou kůží a čtyřmi tesáky, který tráví většinu dne ve vodě?", "answer": "Hroch"},
+  {"text": "Jak se jmenuje africká šelma se skvrnitou srstí a typickým smíchem, která loví i požírá zbytky kořisti jiných zvířat?", "answer": "Hyena"},
+  {"text": "Jaký je chemický vzorec vody?", "answer": "H₂O" },
+  {"text": "Jak se jmeuje název filmu ve kterém rybka Dory pomáhá Marlinovi hledat jeho syna?", "answer": "Hledá se Nemo"},
+  { "text": "Jak se nazývá larva motýla?", "answer": "Housenka" },
+
+  {"text": "Jak se nazývá mořský měkkýš s osmi rameny, který dokáže měnit barvu těla a vystřelit inkoustový mrak?", "answer": "Chobotnice"},
+  {"text": "Jak se jmenuje balkánský stát sousedící se Slovinskem a Bosnou, jehož pobřeží leží na Jaderském moři?", "answer": "Chorvatsko"},
+  {"text": "Jak se jmenuje plaz, který dokáže měnit barvu kůže a má oči pohybující se nezávisle na sobě?", "answer": "Chameleon"},
+
+  {"text": "Jak se jmenuje ostrovní stát v severním Atlantiku, bohatý na sopky, gejzíry a ledovce?", "answer": "Island"},
+  {"text": "Jak se jmenuje stát na jihu Asie, nejlidnatější na světě, se slavnou stavbou Tádž Mahal?", "answer": "Indie"},
+  {"text": "Jak se nazývá oceán ležící mezi Afrikou na západě, Asií na severu a Austrálií na východě?", "answer": "Indický oceán"},
+
+  {"text": "Jak se jmenuje ostrovní stát ve východní Asii, jehož symbolem je hora Fudži?", "answer": "Japonsko"},
+  {"text": "Jak se jmenuje největší planeta sluneční soustavy, složená převážně z plynu?", "answer": "Jupiter"},
+  {"text": "Jak se jmenuje velká šelma se žlutohnědou srstí a tmavoohnědými skvrnami, žijící v pralesích Střední a Jižní Ameriky?", "answer": "Jaguar"},
+  {"text": "Jak se nazývá osobnost známá jako „učitel národů“?", "answer": "Jan Ámos Komenský"},
+  { "text": "Na jakém kontinentu leží Brazílie?", "answer": "Jižní Amerika" },
+  { "text": "Jak se jmenoval první člověk ve vesmíru (stačí příjmení)?", "answer": "Jurij Gagarin" },
+
+  {"text": "Jak se jmenuje nejvyšší hora Afriky, nacházející se v Tanzánii?", "answer": "Kilimandžáro"},
+  {"text": "Jak se jmenuje australský vačnatec s kulatýma ušima, který se živí výhradně listy eukalyptu?", "answer": "Koala"},
+  {"text": "Jak se nazývá nebeské těleso tvořené jádrem z ledu a prachu, s jasně viditelným chvostem při přiblížení ke Slunci?", "answer": "Kometa"},
+  {"text": "Jak se jmenuje hlavní město Egypta?","answer": "Káhira"},
+  { "text": "Jak se jmenuje nejstarší pražský most?", "answer": "Karlův most" },
+  { "text": "Jak se jmenuje největší dravý mořský savec?", "answer": "Kosatka" },
+  { "text": "Jak se jmenuje největší australský vačnatec?", "answer": "Klokan červený" },
+
+  {"text": "Jaké je hlavní město Velké Británie?", "answer": "Londýn"},
+  {"text": "Jak se jmenuje velká africká kočkovitá šelma žijící ve smečkách v savanách, nazývaná král zvířat?", "answer": "Lev"},
+  {"text": "Jak se jmenuje ryba, která se vylíhne v řece, vyrůstá v moři a vrátí se ke tření zpět do řeky, kde se narodila?", "answer": "Losos"},
+  { "text": "Jaký orgán v lidském těle čistí krev?", "answer": "Ledviny" },
+  { "text": "Kdo namaloval Monu Lisu?", "answer": "Leonardo da Vinci" },
+
+  {"text": "Jak se jmenuje přirozená družice Země, která kolem ní oběhne jednou za přibližně 28 dní?", "answer": "Měsíc"},
+  {"text": "Jak se jmenuje slavná řeka protékající středem USA od severu k jihu, ústící do Mexického zálivu?", "answer": "Mississippi"},
+  {"text": "Jak se jmenuje nejmenší planeta soustavy a zároveň je to název české stavebnice?", "answer": "Merkur"},
+  {"text": "Jak se jmenuje hlavní město Španělska?","answer": "Madrid"},
+  {"text": "Jak se jmenuje nejhlubší místo světového oceánu?", "answer": "Mariánský příkop"},
+  {"text": "Jak se jmenuje hlavní město Ruska?","answer": "Moskva"},
+  { "text": "Jak se jmenuje planeta sluneční soustavy označovaná jako Červená planeta?", "answer": "Mars" },
+
+  {"text": "Jak se jmenuje nejdelší řeka Afriky a zároveň jedna z nejdelších řek světa, protékající přes Egypt?", "answer": "Nil"},
+  {"text": "Jak se jmenuje skandinávský stát na západním pobřeží se slavnými fjordy?", "answer": "Norsko"},
+  {"text": "Jak se jmenuje osmá a nejvzdálenější planeta sluneční soustavy, pojmenovaná po římském bohu moří?", "answer": "Neptun"},
+  {"text": "Který savec umí létat?", "answer": "Netopýr"},
+  { "text": "Jak se jmenuje vesmírná agentura USA?", "answer": "NASA" },
+  { "text": "Jak se jmenuje nejslavnější symfonie Antonína Dvořáka?", "answer": "Novosvětská symfonie" },
+
+  {"text": "Jak se jmenuje řecká hora, kde podle antické mytologie sídlili bohové v čele se Diem?", "answer": "Olymp"},
+  {"text": "Jak se nazývá vrstva atmosféry, která chrání Zemi před nebezpečným ultrafialovým zářením Slunce?", "answer": "Ozónová vrstva"},
+  {"text": "Jak se jmenuje hlavní město Norska?","answer": "Oslo"},
+  { "text": "Jak se jmenuje největší přehrada v Česku?", "answer": "Orlík" },
+
+  {"text": "Jak se jmenuje hlavní město Francie, kde stojí Eiffelova věž a protéká jí řeka Seina?", "answer": "Paříž"},
+  {"text": "Jak se jmenuje barevný tropický pták, který dokáže napodobit lidský hlas a bývá chován jako domácí mazlíček?", "answer": "Papoušek"},
+  {"text": "Doplň pranostiku „Únor bílý…“", "answer": "pole sílí"},
+  {"text": "Jak se jmenuje hlavní město Číny?","answer": "Peking"},
+  { "text": "Jak se jmenuje nejvyšší hora Moravy?", "answer": "Praděd" },
+  { "text": "Jak se jmenuje nejznámější opera Bedřicha Smetany?", "answer": "Prodaná nevěsta" },
+  { "text": "Jak se jmenuje největší žijící pták světa?", "answer": "Pštros" },
+  { "text": "Jak se jmenuje savec, který klade vejce?", "answer": "Ptakopysk" },
+
+  {"text": "Jak se jmenuje největší stát světa podle rozlohy, rozkládající se přes Evropu i Asii?", "answer": "Rusko"},
+  {"text": "Jak se jmenuje řeka, která pramení ve Švýcarsku, protéká Německem a Francií a ústí do Severního moře?", "answer": "Rýn"},
+  {"text": "Jak se jmenuje největší rybník v České Republice?", "answer": "Rožmberk"},
+
+  {"text": "Jak se jmenuje hlavní město Itálie, kde se nachází Koloseum?", "answer": "Řím"},
+  {"text": "Jak se jmenuje stát v jihovýchodní Evropě, považovaný za kolébku demokracie a olympijských her?", "answer": "Řecko"},
+  { "text": "Ve které zemi se konaly první moderní olympijské hry?", "answer": "Řecko" },
+
+  {"text": "Jak se jmenuje největší horká poušť světa, která se rozkládá v severní Africe?", "answer": "Sahara"},
+  {"text": "Jak se nazývá hvězda, která je nejbližší hvězdou k Zemi?", "answer": "Slunce"},
+  {"text": "Jak se nazývá hora s kráterem, ze které při erupci vytéká láva a vychází popel a plyny?", "answer": "Sopka"},
+  {"text": "Který orgán v těle čerpá krev?","answer": "Srdce"},
+  {"text": "Doplň pranostiku: Studený máj — ve…", "answer": "stodole ráj"},
+  {"text": "Jak se jmenuje planeta, která má viditelné prstence?","answer": "Saturn"},
+  { "text": "Jak se jmenuje největší kost v lidském těle?", "answer": "Stehenní kost" },
+  { "text": "Jak se jmenuje nejrychlejší pták světa při střemhlavém letu?", "answer": "Sokol stěhovavý" },
+
+  {"text": "Jak se jmenuje stát v jihozápadní Evropě, jehož hlavním městem je Madrid?", "answer": "Španělsko"},
+  {"text": "Jak se jmenuje náš největší národní park, tvořený pohořím na jihozápadní hranici Česka?", "answer": "Šumava"},
+  {"text": "Jak se jmenuje primát, který je nejbližším žijícím příbuzným člověka a žije v afrických lesích?", "answer": "Šimpanz"},
+  {"text": "Která česká automobilka se sídlem v Mladé Boleslavi patří mezi nejstarší výrobce aut na světě?", "answer": "Škoda"},
+
+  {"text": "Jak se nazývá největší a nejhlubší oceán světa, rozkládající se mezi Asií, Amerikou a Austrálií?", "answer": "Tichý oceán"},
+  {"text": "Jak se jmenuje hlavní město Japonska, jedno z největších měst světa?", "answer": "Tokio"},
+  {"text": "Jak se jmenuje největší dravý dinosaurus, jehož latinské jméno znamená tyranský ještěr král?", "answer": "Tyrannosaurus"},
+  {"text": "Jak se jmenuje dětský animovaný seriál, ve kterém parta psích hrdinů zachraňuje město Adventure Bay?", "answer": "Tlapková patrola"},
+  {"text": "Jak se jmenoval první prezident Československa?", "answer": "Tomáš Garrigue Masaryk"},
+  { "text": "Jak se jmenuje nejslavnější cyklistický závod světa?", "answer": "Tour de France" },
+  { "text": "Jak se jmenuje největší kočkovitá šelma světa?", "answer": "Tygr" },
+
+  {"text": "Jak se jmenuje sedmá planeta sluneční soustavy, která se otáčí kolem Slunce téměř na boku?", "answer": "Uran"},
+  {"text": "Jak se jmenuje fosilní palivo těžené v dolech, které vzniklo ze zkamenělých rostlin žijících před miliony lety?", "answer": "Uhlí"},
+  { "text": "Jak se jmenuje pohoří oddělující Evropu od Asie?", "answer": "Ural" },
+
+  {"text": "Jak se jmenuje řeka, která protéká Českým Krumlovem a ústí do Labe u Mělníka?", "answer": "Vltava"},
+  {"text": "Jak se jmenuje druhá planeta sluneční soustavy a zároveň nejteplejší planeta, přestože není Slunci nejblíže?", "answer": "Venuše"},
+  {"text": "Jak se jmenuje nejmenší stát světa, který se nachází uprostřed Říma a je sídlem papeže?", "answer": "Vatikán"},
+  {"text": "Jak se jmenuje nejdelší řeka v Evropě?","answer": "Volha"},
+  {"text": "Co se děje dle pranostiky Na svatého Jiří?", "answer": "Vylézají hadi a štíři"},
+  {"text": "Jak se jmenuje hlavní město Polska?", "answer": "Varšava" },
+  {"text": "Jak se jmenoval první prezident samostatné České republiky?", "answer": "Václav Havel"},
+  { "text": "Jak se nazývá proces přeměny vody z kapaliny na plyn?", "answer": "Vypařování" },
+
+  {"text": "Jak se jmenuje hlavní město Spojených států amerických, pojmenované po prvním prezidentovi USA?", "answer": "Washington"},
+  {"text": "Jak se jmenuje hlavní město Nového Zélandu?", "answer": "Wellington"},
+  {"text": "Jakou zkratku má místnost v domě, která se ve starých hradech označovala jako prevít?", "answer": "WC"},
+
+  {"text": "Jaký pojem, který představuje africké zvíře i součást vozovky?", "answer": "Zebra"},
+  {"text": "Jak se nazývá přírodní jev způsobený pohybem tektonických desek?", "answer": "Zemětřesení"},
+  {"text": "Která barva vznikne smícháním modré a žluté?","answer": "Zelená"},
+  {"text": "Jak se jmenuje kov s chemickou značkou Au?", "answer": "Zlato"},
+
+  {"text": "Jak se jmenuje nejvyšší suchozemské zvíře světa, které díky svému dlouhému krku dosahuje na větve stromů?", "answer": "Žirafa"},
+  {"text": "Jak se jmenuje velký mořský dravec s ostrými trojúhelníkovými zuby, patřící mezi chrupavčité ryby?", "answer": "Žralok"},
+  {"text": "Jak se jmenuje obojživelník bez ocasu žijící u vody, jehož mláďata se nazývají pulci?", "answer": "Žába"},
+  
+  {"text": "Pod jakým číslem závodil Blesk McQueen ve filmu Cars / Auta?", "answer": "95"},
+  { "text": "Ve kterém roce přistáli první lidé na Měsíci?", "answer": "1969" },
+  { "text": "Ve kterém roce začala první světová válka?", "answer": "1914" },
+  { "text": "Ve kterém roce skončila druhá světová válka?", "answer": "1945" },
+  { "text": "Ve kterém roce proběhla Sametová revoluce v Česku?", "answer": "1989" },
+  {"text": "Kolik planet je ve Sluneční soustavě?", "answer": "8"},
+  {"text": "Kolik hodin má jeden týden?", "answer": "168"},
+  {"text": "Kolik centimetrů má deset metrů?", "answer": "1000"},
+  {"text": "Kolik noh má pavouk?", "answer": "8"},
+  {"text": "Kolik očí má pavouk?", "answer": "8"},
+  {"text": "Kolik sekund má jedna hodina?", "answer": "3600" },
+  {"text": "Kolik dní má únor v přestupném roce?", "answer": "29"},
+  {"text": "Kolik gramů je v jedné tuně?","answer": "1000000"},
+  {"text": "Kolik stran má krychle?","answer": "6"},
+  {"text": "Kolik vrcholů má krychle?","answer": "8"},
+  {"text": "Kolik hran má krychle?","answer": "12"},
+  {"text": "Kolik hráčů nastupuje do fotbalu na hřiště za jeden tým?", "answer": "11"},
+  { "text": "Kolik minut trvá standardní fotbalový zápas?", "answer": "90" },
+  { "text": "Kolik hráčů nastupuje v basketbalu za jeden tým na hřiště?", "answer": "5" },
+  {"text": "Kolik barev má duha?","answer": "7"},
+  {"text": "Kolik hráčů nastupuje ve volejbale na hřiště za jeden tým?", "answer": "6"},
+  { "text": "Kolik párů chromozomů má člověk?", "answer": "23" },
+  { "text": "Kolik stupňů má pravý úhel?", "answer": "90" },
+  { "text": "Kolik stupňů je součet vnitřních úhlů trojúhelníku?", "answer": "180" },
+  { "text": "Kolik krajů má Česká republika?", "answer": "14" },
+  { "text": "Kolik stran má pravidelný šestiúhelník?", "answer": "6" },
+  { "text": "Kolik ramen má hvězdice?", "answer": "5" },
+  {"text": "Kolik noh má včela?","answer": "6"}
 ]
+
