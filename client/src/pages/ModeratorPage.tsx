@@ -199,8 +199,8 @@ export default function ModeratorPage() {
             <input value={startForm.p1} onChange={e => setStartForm(s => ({ ...s, p1: e.target.value }))} placeholder="Jméno hráče 1" style={{ padding: '8px 12px', borderRadius: 8, border: '1px solid rgba(249,115,22,0.3)', background: 'rgba(249,115,22,0.08)', color: '#f1f5f9', fontSize: '0.9rem', outline: 'none' }} />
             <input value={startForm.p2} onChange={e => setStartForm(s => ({ ...s, p2: e.target.value }))} placeholder="Jméno hráče 2" style={{ padding: '8px 12px', borderRadius: 8, border: '1px solid rgba(34,211,238,0.3)', background: 'rgba(34,211,238,0.08)', color: '#f1f5f9', fontSize: '0.9rem', outline: 'none' }} />
             <select value={startForm.round} onChange={e => setStartForm(s => ({ ...s, round: e.target.value as Round }))} style={{ padding: '8px 12px', borderRadius: 8, border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.05)', color: '#f1f5f9', fontSize: '0.9rem' }}>
-              <option value="NUMBERS">1. kolo — Čísla</option>
-              <option value="LETTERS">2. kolo — Písmena</option>
+              <option value="NUMBERS">Čísla</option>
+              <option value="LETTERS">Písmena</option>
             </select>
             <button type="submit" style={{ padding: '10px', borderRadius: 8, border: 'none', background: 'linear-gradient(135deg, #22c55e, #15803d)', color: 'white', fontWeight: 700, cursor: 'pointer', fontSize: '0.9rem' }}>▶ Spustit hru</button>
           </form>
