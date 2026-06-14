@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react'
 import { useGameSocket } from '../hooks/useGameSocket'
-import HexBoard from '../components/HexBoard'
+import HexBoard, { calcHexSize } from '../components/HexBoard'
+import { LETTERS_MAP } from 'azkivz-shared'
+import type { Round } from 'azkivz-shared'
 
 const TIMER_SECONDS = 10
+const FLIP_MS = 700
 
 function useCountdown(timerStartedAt: string | null): number | null {
   const [remaining, setRemaining] = useState<number | null>(null)
@@ -45,9 +48,80 @@ function TimerHex({ remaining, player }: { remaining: number | null; player: 1 |
   )
 }
 
+function FlipHex({
+  fieldNumber, round, hint, player, hexH, hexW, fontSize,
+}: {
+  fieldNumber: number
+  round: Round
+  hint: string | null
+  player: 1 | 2 | null
+  hexH: number
+  hexW: number
+  fontSize: number
+}) {
+  const [showHint, setShowHint] = useState(false)
+
+  useEffect(() => {
+    const t = setTimeout(() => setShowHint(true), Math.round(FLIP_MS * 0.43))
+    return () => clearTimeout(t)
+  }, [])
+
+  const label = round === 'LETTERS' ? LETTERS_MAP[fieldNumber] : String(fieldNumber)
+
+  const frontBg = 'linear-gradient(160deg, #fef08a 0%, #fbbf24 55%, #d97706 100%)'
+  const backBg = player === 2
+    ? 'linear-gradient(160deg, #a5f3fc 0%, #22d3ee 55%, #0e7490 100%)'
+    : 'linear-gradient(160deg, #fdba74 0%, #f97316 55%, #c2410c 100%)'
+  const backTextColor = player === 2 ? '#042f2e' : 'white'
+
+  const glowColor = showHint
+    ? (player === 2 ? 'rgba(34,211,238,0.85)' : 'rgba(249,115,22,0.85)')
+    : 'rgba(251,191,36,0.95)'
+
+  const hintFontSize = Math.floor(hexH * (hint && hint.length > 4 ? 0.22 : 0.3))
+
+  return (
+    <div style={{ animation: `flip-scale-up ${FLIP_MS}ms ease-out forwards` }}>
+      <div style={{
+        width: hexW,
+        height: hexH,
+        clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)',
+        background: showHint ? backBg : frontBg,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        filter: `drop-shadow(0 0 28px ${glowColor}) drop-shadow(0 18px 40px rgba(0,0,0,0.85))`,
+        animation: showHint
+          ? `flip-unfold ${Math.round(FLIP_MS * 0.57)}ms ease-out forwards`
+          : `flip-fold ${Math.round(FLIP_MS * 0.43)}ms ease-in forwards`,
+      }}>
+        <span style={{
+          fontSize: showHint ? hintFontSize : fontSize,
+          fontWeight: 900,
+          color: showHint ? backTextColor : '#1c0f00',
+          lineHeight: 1,
+          userSelect: 'none',
+          letterSpacing: showHint ? '0.06em' : '0',
+          textAlign: 'center',
+          padding: '0 8%',
+        }}>
+          {showHint ? (hint ?? '?') : label}
+        </span>
+      </div>
+    </div>
+  )
+}
+
 export default function PublicPage() {
   const { gameState, connected } = useGameSocket()
   const countdown = useCountdown(gameState.timerStartedAt)
+  const [hexSize, setHexSize] = useState(() => calcHexSize(false))
+
+  useEffect(() => {
+    const handle = () => setHexSize(calcHexSize(false))
+    window.addEventListener('resize', handle)
+    return () => window.removeEventListener('resize', handle)
+  }, [])
 
   return (
     <div style={{
@@ -65,22 +139,11 @@ export default function PublicPage() {
           <span style={{ display: 'inline-block', width: 7, height: 7, borderRadius: '50%', background: connected ? '#22c55e' : '#ef4444', boxShadow: connected ? '0 0 6px #22c55e' : 'none' }} />
           {gameState.round === 'NUMBERS' ? '1. kolo — Čísla' : '2. kolo — Písmena'}
         </div>
-        {gameState.activeField && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'rgba(251,191,36,0.1)', border: '1px solid rgba(251,191,36,0.25)', borderRadius: 24, padding: '6px 18px', fontSize: '1rem', color: '#fbbf24', fontWeight: 500 }}>
-            <span style={{ width: 8, height: 8, background: '#fbbf24', borderRadius: '50%' }} />
-            Aktivní: <strong style={{ marginLeft: 4, color: '#fde68a', fontSize: '1.2rem' }}>{gameState.activeField}</strong>
-            {gameState.activeFieldHint && (
-              <span style={{ marginLeft: 8, background: 'rgba(251,191,36,0.2)', borderRadius: 8, padding: '2px 10px', fontSize: '1.1rem', fontWeight: 900, letterSpacing: '0.05em', color: '#fde68a' }}>
-                {gameState.activeFieldHint}
-              </span>
-            )}
-          </div>
-        )}
         <div style={{ width: 56 }} />
       </div>
 
       {/* Board */}
-      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', minHeight: 0 }}>
+      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', minHeight: 0, position: 'relative' }}>
         {gameState.status === 'WAITING' ? (
           <div style={{ color: '#475569', fontSize: '1.2rem', textAlign: 'center' }}>
             <div style={{ fontSize: '3rem', marginBottom: 12 }}>⏳</div>
@@ -94,19 +157,44 @@ export default function PublicPage() {
             </div>
           </div>
         ) : (
-          <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
-            <div style={{ width: 140, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-              {gameState.activeField !== null && gameState.activePlayer === 1 && (
-                <TimerHex remaining={countdown} player={1} />
-              )}
+          <>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
+              <div style={{ width: 140, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                {gameState.activeField !== null && gameState.activePlayer === 1 && (
+                  <TimerHex remaining={countdown} player={1} />
+                )}
+              </div>
+              <HexBoard gameState={gameState} />
+              <div style={{ width: 140, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                {gameState.activeField !== null && gameState.activePlayer === 2 && (
+                  <TimerHex remaining={countdown} player={2} />
+                )}
+              </div>
             </div>
-            <HexBoard gameState={gameState} />
-            <div style={{ width: 140, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-              {gameState.activeField !== null && gameState.activePlayer === 2 && (
-                <TimerHex remaining={countdown} player={2} />
-              )}
-            </div>
-          </div>
+
+            {gameState.activeField !== null && (
+              <div style={{
+                position: 'absolute',
+                inset: 0,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                zIndex: 50,
+                pointerEvents: 'none',
+              }}>
+                <FlipHex
+                  key={gameState.activeField}
+                  fieldNumber={gameState.activeField}
+                  round={gameState.round}
+                  hint={gameState.activeFieldHint}
+                  player={gameState.activePlayer}
+                  hexH={hexSize.hexH}
+                  hexW={hexSize.hexW}
+                  fontSize={hexSize.fontSize}
+                />
+              </div>
+            )}
+          </>
         )}
       </div>
 

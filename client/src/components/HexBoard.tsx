@@ -8,7 +8,7 @@ interface HexBoardProps {
   compact?: boolean
 }
 
-function calcHexSize(compact: boolean) {
+export function calcHexSize(compact: boolean) {
   if (compact) return { hexW: 52, hexH: 60, gap: 6, fontSize: 20 }
   if (typeof window === 'undefined') return { hexW: 52, hexH: 60, gap: 6, fontSize: 20 }
   const GAP = 10
