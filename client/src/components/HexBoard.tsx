@@ -32,7 +32,8 @@ export default function HexBoard({ gameState, onFieldClick, compact = false }: H
   }, [compact])
 
   const { hexW, hexH, gap, fontSize } = size
-  const overlap = Math.floor(hexH * 0.25)
+  // Subtract perpendicular-equivalent of horizontal gap to match visual spacing on angled sides
+  const overlap = Math.max(0, Math.floor(hexH * 0.25 - gap / 0.866))
 
   const rows: number[][] = []
   let field = 1
