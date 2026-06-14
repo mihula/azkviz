@@ -120,9 +120,8 @@ export default function ModeratorPage() {
   }
 
   function handleFieldClick(fieldNumber: number) {
-    socket?.emit('moderator:selectField', { fieldNumber })
     const isClaimed = gameState.claimedP1.includes(fieldNumber) || gameState.claimedP2.includes(fieldNumber)
-    if (!isClaimed) socket?.emit('moderator:startTimer')
+    socket?.emit('moderator:selectField', { fieldNumber, autoStartTimer: !isClaimed })
     const isYesNo = gameState.unansweredFields.includes(fieldNumber)
     if (isYesNo) loadYesNoQuestion()
     else loadQuestion(fieldNumber)

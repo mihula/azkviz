@@ -53,7 +53,7 @@ export interface ServerToClientEvents {
 }
 
 export interface ClientToServerEvents {
-  'moderator:selectField': (data: { fieldNumber: number }) => void
+  'moderator:selectField': (data: { fieldNumber: number; autoStartTimer?: boolean }) => void
   'moderator:claimField': (data: { player: 1 | 2 }) => void
   'moderator:skipField': () => void
   'moderator:startGame': (data: { player1Name: string; player2Name: string; round: Round }) => void

@@ -82,7 +82,7 @@ export async function startGame(
   return parseState(raw)
 }
 
-export async function selectField(fieldNumber: number): Promise<GameState> {
+export async function selectField(fieldNumber: number, autoStartTimer = false): Promise<GameState> {
   const current = await prisma.gameState.findUnique({ where: { id: 1 } })
   if (!current) throw new Error('GameState not initialized')
   const unanswered: number[] = JSON.parse(current.unansweredFields || '[]')
@@ -98,7 +98,12 @@ export async function selectField(fieldNumber: number): Promise<GameState> {
 
   const raw = await prisma.gameState.update({
     where: { id: 1 },
-    data: { activeField: fieldNumber, activeQuestionType: questionType, timerStartedAt: null, activeFieldHint },
+    data: {
+      activeField: fieldNumber,
+      activeQuestionType: questionType,
+      timerStartedAt: autoStartTimer ? new Date() : null,
+      activeFieldHint,
+    },
   })
   return parseState(raw)
 }

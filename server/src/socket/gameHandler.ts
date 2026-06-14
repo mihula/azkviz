@@ -47,8 +47,8 @@ export function registerGameHandlers(io: TypedServer, socket: TypedSocket) {
     await broadcast(io)
   })
 
-  socket.on('moderator:selectField', async ({ fieldNumber }) => {
-    await selectField(fieldNumber)
+  socket.on('moderator:selectField', async ({ fieldNumber, autoStartTimer }) => {
+    await selectField(fieldNumber, autoStartTimer)
     await broadcast(io)
   })
 
