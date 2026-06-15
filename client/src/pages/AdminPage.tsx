@@ -3,7 +3,7 @@ import PinGate from '../components/PinGate'
 import { Question, QuestionInput } from 'azkivz-shared'
 
 export default function AdminPage() {
-  const [token, setToken] = useState<string | null>(() => localStorage.getItem('mod_token'))
+  const [token, setToken] = useState<string | null>(() => localStorage.getItem('admin_token'))
   const [questions, setQuestions] = useState<Question[]>([])
   const [form, setForm] = useState<Partial<QuestionInput & { id?: number }>>({})
   const [editing, setEditing] = useState<number | null>(null)
@@ -38,7 +38,7 @@ export default function AdminPage() {
 
   useEffect(() => { fetchYesno() }, [fetchYesno])
 
-  if (!token) return <PinGate onSuccess={(t) => { localStorage.setItem('mod_token', t); setToken(t) }} />
+  if (!token) return <PinGate onSuccess={(t) => { localStorage.setItem('admin_token', t); setToken(t) }} />
 
   async function handleSave(e: React.FormEvent) {
     e.preventDefault()
@@ -132,6 +132,9 @@ export default function AdminPage() {
         <span style={{ background: 'rgba(139,92,246,0.2)', border: '1px solid rgba(139,92,246,0.4)', borderRadius: 20, padding: '2px 10px', fontSize: '0.7rem', fontWeight: 600, color: '#a78bfa', textTransform: 'uppercase' as const }}>Admin</span>
         <div style={{ flex: 1 }} />
         <a href="/" style={{ color: '#64748b', fontSize: '0.8rem', textDecoration: 'none' }}>← Zpět na hru</a>
+        <button onClick={() => { localStorage.removeItem('admin_token'); setToken(null) }} style={{ padding: '4px 12px', borderRadius: 6, border: '1px solid rgba(255,255,255,0.1)', background: 'transparent', color: '#64748b', cursor: 'pointer', fontSize: '0.75rem' }}>
+          Odhlásit
+        </button>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: 24, alignItems: 'start' }}>
