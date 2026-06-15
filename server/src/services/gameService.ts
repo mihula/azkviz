@@ -102,7 +102,9 @@ export async function selectField(fieldNumber: number, autoStartTimer = false): 
   const assignments = JSON.parse(current.questionAssignments || '{}') as Record<string, number>
   const questionId = assignments[String(fieldNumber)]
   let activeFieldHint: string | null = null
-  if (questionId) {
+  if (questionType === 'yesno') {
+    activeFieldHint = 'A/N'
+  } else if (questionId) {
     const q = await prisma.question.findUnique({ where: { id: questionId }, select: { answerHint: true } })
     activeFieldHint = q?.answerHint ?? null
   }
