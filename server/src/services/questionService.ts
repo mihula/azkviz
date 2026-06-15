@@ -81,10 +81,18 @@ export async function rerollQuestion(fieldNumber: number): Promise<Question | nu
   const newId = pool[Math.floor(Math.random() * pool.length)].id
 
   assignments[String(fieldNumber)] = newId
-  await prisma.gameState.update({ where: { id: 1 }, data: { questionAssignments: JSON.stringify(assignments) } })
-
   const row = await prisma.question.findUnique({ where: { id: newId } })
-  return row ? toQuestion(row) : null
+  if (!row) return null
+
+  await prisma.gameState.update({
+    where: { id: 1 },
+    data: {
+      questionAssignments: JSON.stringify(assignments),
+      activeFieldHint: row.answerHint,
+    },
+  })
+
+  return toQuestion(row)
 }
 
 export async function importQuestions(items: QuestionInput[]): Promise<number> {
