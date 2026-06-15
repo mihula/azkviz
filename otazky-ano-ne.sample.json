@@ -1,5 +1,6 @@
 [
   { "text": "Je Praha - historické centrum Prahy zapsáno na seznamu UNESCO?", "answer": "Ano" },
+  { "text": "Leží Ostrava na mapě severněji než Praha?", "answer": "Ne" },  
   { "text": "Je Nil nejdelší řeka na světě?", "answer": "Ano" },
   { "text": "Je velryba ryba?", "answer": "Ne" },
   { "text": "Má člověk v těle více než 200 kostí?", "answer": "Ano" },
@@ -163,5 +164,8 @@
   { "text": "Je Slunce složeno převážně z vodíku?", "answer": "Ano" },
   { "text": "Je mozek sval?", "answer": "Ne" },
   { "text": "Je Karlův most nejstarší kamenný most v Česku?", "answer": "Ne" },
-  { "text": "Je rybník Svět v Třeboni největší rybník v Česku?", "answer": "Ne" }
+  { "text": "Je rybník Svět v Třeboni největší rybník v Česku?", "answer": "Ne" },
+  { "text": "Znak obce Králův Dvůr je známý jako zlatá koruna v červeném štítě nad stříbrnou kvádrovanou zdí s cimbuřím.", "answer": "Ano" },
+  { "text": "Je pravda, že Králův Dvůr více než 9 ale méně než 10 tisíc obyvatel?", "answer": "Ne" },
+  { "text": "Je Orlík největší přehrada v Česku?", "answer": "Ne"}
 ]

@@ -33,6 +33,7 @@
   {"text": "Jak se nazývají vyhynulí plazi, kteří ovládali pevninu v druhohorách?", "answer": "Dinosauři"},
   {"text": "Co je nejtvrdší přírodní látka na světě?", "answer": "Diamant"},
   {"text": "Jak se jmenuje měna Spojených států amerických?","answer": "Dolar"},
+  {"text": "Jak se jmenuje přečerpávací vodní elektrárna v Jeseníkách, která má horní nádrž ve tvaru elipsy?", "answer": "Dlouhé stráně"},
 
   {"text": "Jak se jmenuje nejvyšší hora světa, nacházející se v Himalájích na hranici Nepálu a Tibetu?", "answer": "Everest"},
   {"text": "Jak se jmenuje jihoamerický stát pojmenovaný podle zeměpisné linie nultého rovnoběžníku?", "answer": "Ekvádor"},
@@ -85,6 +86,7 @@
   {"text": "Jak se jmenuje ryba, která se vylíhne v řece, vyrůstá v moři a vrátí se ke tření zpět do řeky, kde se narodila?", "answer": "Losos"},
   { "text": "Jaký orgán v lidském těle čistí krev?", "answer": "Ledviny" },
   { "text": "Kdo namaloval Monu Lisu?", "answer": "Leonardo da Vinci" },
+  {"text": "Jak se jmenuje největší vodní nádrž v Česku, která leží na horním toku Vltavy u hranic s Rakouskem?", "answer": "Lipno"},
 
   {"text": "Jak se jmenuje přirozená družice Země, která kolem ní oběhne jednou za přibližně 28 dní?", "answer": "Měsíc"},
   {"text": "Jak se jmenuje slavná řeka protékající středem USA od severu k jihu, ústící do Mexického zálivu?", "answer": "Mississippi"},
@@ -104,7 +106,7 @@
   {"text": "Jak se jmenuje řecká hora, kde podle antické mytologie sídlili bohové v čele se Diem?", "answer": "Olymp"},
   {"text": "Jak se nazývá vrstva atmosféry, která chrání Zemi před nebezpečným ultrafialovým zářením Slunce?", "answer": "Ozónová vrstva"},
   {"text": "Jak se jmenuje hlavní město Norska?","answer": "Oslo"},
-  { "text": "Jak se jmenuje největší přehrada v Česku?", "answer": "Orlík" },
+  {"text": "Jak se jmenuje přehrada na řece Vltavě, která je známá svým hradem a velkou vodní plochou?", "answer": "Orlík"},
 
   {"text": "Jak se jmenuje hlavní město Francie, kde stojí Eiffelova věž a protéká jí řeka Seina?", "answer": "Paříž"},
   {"text": "Jak se jmenuje barevný tropický pták, který dokáže napodobit lidský hlas a bývá chován jako domácí mazlíček?", "answer": "Papoušek"},
@@ -198,6 +200,35 @@
   { "text": "Kolik krajů má Česká republika?", "answer": "14" },
   { "text": "Kolik stran má pravidelný šestiúhelník?", "answer": "6" },
   { "text": "Kolik ramen má hvězdice?", "answer": "5" },
-  {"text": "Kolik noh má včela?","answer": "6"}
+  {"text": "Kolik noh má včela?","answer": "6"},
+  
+  {"text": "Která postava českých pověstí je známá cestou do světa, kouzelným mečem a lvem společníkem?", "answer": "kníže Bruncvík"},
+  {"text": "Který český král a římský císař je označován jako Otec vlasti?", "answer": "Karel IV"},
+  {"text": "Který český spisovatel napsal dílo Osudy dobrého vojáka Švejka?", "answer": "Jaroslav Hašek"},
+  {"text": "Který český scenárista, herec a spoluzakladatel Divadla Járy Cimrmana je autorem filmů jako Kolja nebo Obecná škola?", "answer": "Zdeněk Svěrák"},
+  {"text": "Který český hudebník je frontmanem kapely Mirai?", "answer": "Mirai Navrátil"},
+  {"text": "Který český písničkář je autorem skladeb jako Mám doma kočku, V lese a Dělniq?", "answer": "Pokáč"},
+  {"text": "Který český hudebník je frontmanem kapely Kryštof?", "answer": "Richard Krajčo"},
+  {"text": "Jak se jmenuje český večerníček o dvou nešikovných kutilech, kteří neustále něco opravují a končí to vždy jinak, než plánovali?", "answer": "A je to"},
+  {"text": "Jak se nazývá technologie, která umožňuje strojům samostatně vyhodnocovat data, učit se a rozhodovat podobně jako člověk?", "answer": "umělá inteligence"},
+  {"text": "Jak se nazývá nejmenší stavební jednotka živých organismů?", "answer": "buňka"},
+  {"text": "Jak se jmenuje síla, která přitahuje tělesa k Zemi?", "answer": "gravitace"},
+  {"text": "Kdo je autorem teorie relativity", "answer": "Albert Einstein"},
+  {"text": "Jaké je označení dálnice, která vede z Prahy přes Králův Dvůr směrem na Plzeň?", "answer": "D5"},
+  {"text": "Jak se jmenuje řeka, která vzniká v Plzni soutokem Mže a Radbuzy?", "answer": "Berounka"},
+  {"text": "Jak se jmenuje dvojice hradů kousek za Královým Dvorem stojící blízko sebe?", "answer": "Žebrák Točník"},
+  {"text": "Jakou barvu má štít ve znaku obce Králův Dvůr, na němž je zlatá koruna nad stříbrnou kvádrovanou zdí s cimbuřím?", "answer": "červenou" },
+  {"text": "Doplň přísloví: Jak se do lesa volá, tak se z...", "answer": "lesa ozývá"},
+  {"text": "Doplň přísloví: Ranní ptáče...", "answer": "dál doskáče"},
+  {"text": "Doplň přísloví: Kdo jinému jámu kopá,...", "answer": "sám do ní padá"},
+  {"text": "Doplň přísloví: Bez práce...", "answer": "nejsou koláče"},
+  {"text": "Doplň přísloví: Lepší vrabec v hrsti než...", "answer": "holub na střeše"},
+  {"text": "Doplň přísloví: Kdo se směje naposled, ten se...", "answer": "směje nejlépe"},
+  {"text": "Doplň přísloví: Kdo se bojí, nesmí ...", "answer": "do lesa"},
+  {"text": "Doplň rčení: Žádný učený z...", "answer": "nebe nespadl"},
+  {"text": "Na jaké ulici sídlí ZŠ Králův Dvůr – Počaply?", "answer": "Tyršova"},
+  {"text": "Co roste, i když ho nikdo nekrmí, a donutí tě hledat lednici?", "answer": "Hlad"},
+  {"text": "Čím je toho víc, tím méně to váží. Co je to?", "answer": "díry"},
+  {"text": "Když se to vyhodí, je to bílé, když to spadne, je to bagr. Co je to?", "answer": "kinder vajíčko"}
 ]
 
