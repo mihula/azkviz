@@ -230,11 +230,15 @@ export default function ModeratorPage() {
                   <button
                     onClick={async () => {
                       if (!token || !gameState.activeField) return
-                      const res = await fetch(`/api/questions/for-field/${gameState.activeField}/reroll`, {
-                        method: 'POST',
-                        headers: { Authorization: `Bearer ${token}` },
-                      })
-                      if (res.ok) setQuestion(await res.json())
+                      if (gameState.activeQuestionType === 'yesno') {
+                        loadYesNoQuestion()
+                      } else {
+                        const res = await fetch(`/api/questions/for-field/${gameState.activeField}/reroll`, {
+                          method: 'POST',
+                          headers: { Authorization: `Bearer ${token}` },
+                        })
+                        if (res.ok) setQuestion(await res.json())
+                      }
                     }}
                     style={{ padding: '3px 10px', borderRadius: 6, border: '1px solid rgba(251,191,36,0.3)', background: 'rgba(251,191,36,0.07)', color: '#fbbf24', fontWeight: 600, cursor: 'pointer', fontSize: '0.72rem' }}>
                     ↺ Jiná otázka
