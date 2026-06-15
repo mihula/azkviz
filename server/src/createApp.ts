@@ -1,23 +1,19 @@
 import express, { Application } from 'express'
 import cors from 'cors'
 import path from 'path'
-import { Server } from 'socket.io'
-import { ServerToClientEvents, ClientToServerEvents } from 'azkivz-shared'
 import authRouter from './routes/auth'
-import { createQuestionsRouter } from './routes/questions'
+import questionsRouter from './routes/questions'
 import gameRouter from './routes/game'
 import yesnoRouter from './routes/yesno'
 
-type TypedServer = Server<ClientToServerEvents, ServerToClientEvents>
-
-export function createApp(io?: TypedServer): Application {
+export function createApp(): Application {
   const app = express()
   app.use(cors({ origin: process.env.CLIENT_ORIGIN || '*' }))
   app.use(express.json({ limit: '2mb' }))
 
   app.use('/api/auth', authRouter)
   app.use('/api/questions/yesno', yesnoRouter)
-  app.use('/api/questions', createQuestionsRouter(io!))
+  app.use('/api/questions', questionsRouter)
   app.use('/api/game', gameRouter)
 
   // Serve React build in production

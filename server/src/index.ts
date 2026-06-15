@@ -7,6 +7,7 @@ import { Server } from 'socket.io'
 import { ServerToClientEvents, ClientToServerEvents } from 'azkivz-shared'
 import { createApp } from './createApp'
 import { registerGameHandlers } from './socket/gameHandler'
+import { setIo } from './lib/io'
 import prisma from './lib/prisma'
 
 const PORT = Number(process.env.PORT) || 3001
@@ -19,14 +20,14 @@ async function main() {
     create: { id: 1 },
   })
 
-  const httpServer = http.createServer()
+  const app = createApp()
+  const httpServer = http.createServer(app)
 
   const io = new Server<ClientToServerEvents, ServerToClientEvents>(httpServer, {
     cors: { origin: '*' },
   })
 
-  const app = createApp(io)
-  httpServer.on('request', app)
+  setIo(io)
 
   io.on('connection', (socket) => {
     registerGameHandlers(io, socket)
