@@ -243,6 +243,13 @@ export default function PublicPage() {
     return () => timers.forEach(clearTimeout)
   }, [gameState.activeField])
 
+  // Update chip hint when reroll changes activeFieldHint without changing activeField
+  useEffect(() => {
+    if (chipRef.current !== null && gameState.activeField === chipRef.current.fieldNumber) {
+      setChip(c => c ? { ...c, hint: gameState.activeFieldHint } : null)
+    }
+  }, [gameState.activeFieldHint, gameState.activeField])
+
   const winningFields = useMemo(() => {
     if (gameState.status !== 'FINISHED' || !gameState.winner) return []
     const claimed = gameState.winner === 1 ? gameState.claimedP1 : gameState.claimedP2
