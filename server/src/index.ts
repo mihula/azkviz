@@ -19,12 +19,14 @@ async function main() {
     create: { id: 1 },
   })
 
-  const app = createApp()
-  const httpServer = http.createServer(app)
+  const httpServer = http.createServer()
 
   const io = new Server<ClientToServerEvents, ServerToClientEvents>(httpServer, {
     cors: { origin: '*' },
   })
+
+  const app = createApp(io)
+  httpServer.on('request', app)
 
   io.on('connection', (socket) => {
     registerGameHandlers(io, socket)
