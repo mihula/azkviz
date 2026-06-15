@@ -1,5 +1,5 @@
 import prisma from '../lib/prisma'
-import { Question, QuestionInput } from 'azkivz-shared'
+import { Question, QuestionInput, LETTERS_MAP } from 'azkivz-shared'
 
 export function computeAnswerHint(answer: string): string {
   return answer
@@ -73,11 +73,34 @@ export async function rerollQuestion(fieldNumber: number): Promise<Question | nu
   const assignments = JSON.parse(gameState.questionAssignments || '{}') as Record<string, number>
   const currentId = assignments[String(fieldNumber)]
 
-  const questions = await prisma.question.findMany({ select: { id: true } })
+  const questions = await prisma.question.findMany({ select: { id: true, answer: true } })
   if (questions.length === 0) return null
 
-  const others = questions.filter(q => q.id !== currentId)
-  const pool = others.length > 0 ? others : questions
+  let pool: { id: number; answer: string }[]
+
+  if (gameState.round === 'LETTERS') {
+    const letter = LETTERS_MAP[fieldNumber]
+    const letterLower = letter.toLowerCase()
+    const matchingOthers = questions.filter(q => {
+      if (q.id === currentId) return false
+      const a = q.answer.toLowerCase()
+      if (!a.startsWith(letterLower)) return false
+      if (letterLower === 'c' && a.startsWith('ch')) return false
+      return true
+    })
+    if (matchingOthers.length > 0) {
+      pool = matchingOthers
+    } else {
+      // fallback: numeric answers (start with digit), excluding current
+      const numeric = questions.filter(q => q.id !== currentId && /^\d/.test(q.answer))
+      pool = numeric.length > 0 ? numeric : questions.filter(q => q.id !== currentId)
+      if (pool.length === 0) pool = questions
+    }
+  } else {
+    const others = questions.filter(q => q.id !== currentId)
+    pool = others.length > 0 ? others : questions
+  }
+
   const newId = pool[Math.floor(Math.random() * pool.length)].id
 
   assignments[String(fieldNumber)] = newId
