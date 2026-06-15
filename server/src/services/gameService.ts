@@ -42,8 +42,16 @@ export async function startGame(
   if (questions.length === 0) throw new Error('No questions in database')
 
   const assignments: Record<string, number> = {}
-  for (let f = 1; f <= 28; f++) {
-    if (round === 'LETTERS') {
+  const used = new Set<number>()
+
+  if (round === 'NUMBERS') {
+    // Shuffle so each field gets a unique question (cycles only if pool < 28)
+    const shuffled = [...questions].sort(() => Math.random() - 0.5)
+    for (let f = 1; f <= 28; f++) {
+      assignments[String(f)] = shuffled[(f - 1) % shuffled.length].id
+    }
+  } else {
+    for (let f = 1; f <= 28; f++) {
       const letter = LETTERS_MAP[f]
       const letterLower = letter.toLowerCase()
       const matching = questions.filter(q => {
@@ -54,9 +62,12 @@ export async function startGame(
         return true
       })
       const pool = matching.length > 0 ? matching : questions
-      assignments[String(f)] = pool[Math.floor(Math.random() * pool.length)].id
-    } else {
-      assignments[String(f)] = questions[Math.floor(Math.random() * questions.length)].id
+      // Prefer questions not yet used; fall back to full pool if all used
+      const unused = pool.filter(q => !used.has(q.id))
+      const candidates = unused.length > 0 ? unused : pool
+      const picked = candidates[Math.floor(Math.random() * candidates.length)]
+      assignments[String(f)] = picked.id
+      used.add(picked.id)
     }
   }
 

@@ -8,6 +8,7 @@ import {
   deleteAllQuestions,
   importQuestions,
   getQuestionByAssignment,
+  rerollQuestion,
 } from '../services/questionService'
 
 const router = Router()
@@ -22,6 +23,15 @@ router.get('/', async (_req, res) => {
 // /for-field and /import must come before /:id
 router.get('/for-field/:fieldNumber', async (req, res) => {
   const q = await getQuestionByAssignment(Number(req.params.fieldNumber))
+  if (!q) {
+    res.status(404).json({ error: 'Question not found' })
+    return
+  }
+  res.json(q)
+})
+
+router.post('/for-field/:fieldNumber/reroll', async (req, res) => {
+  const q = await rerollQuestion(Number(req.params.fieldNumber))
   if (!q) {
     res.status(404).json({ error: 'Question not found' })
     return

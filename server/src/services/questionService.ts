@@ -66,6 +66,27 @@ export async function deleteAllQuestions(): Promise<number> {
   return result.count
 }
 
+export async function rerollQuestion(fieldNumber: number): Promise<Question | null> {
+  const gameState = await prisma.gameState.findUnique({ where: { id: 1 } })
+  if (!gameState) return null
+
+  const assignments = JSON.parse(gameState.questionAssignments || '{}') as Record<string, number>
+  const currentId = assignments[String(fieldNumber)]
+
+  const questions = await prisma.question.findMany({ select: { id: true } })
+  if (questions.length === 0) return null
+
+  const others = questions.filter(q => q.id !== currentId)
+  const pool = others.length > 0 ? others : questions
+  const newId = pool[Math.floor(Math.random() * pool.length)].id
+
+  assignments[String(fieldNumber)] = newId
+  await prisma.gameState.update({ where: { id: 1 }, data: { questionAssignments: JSON.stringify(assignments) } })
+
+  const row = await prisma.question.findUnique({ where: { id: newId } })
+  return row ? toQuestion(row) : null
+}
+
 export async function importQuestions(items: QuestionInput[]): Promise<number> {
   const data = items.map((item) => ({
     text: item.text,

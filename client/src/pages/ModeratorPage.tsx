@@ -225,7 +225,21 @@ export default function ModeratorPage() {
             {/* Question display */}
             {question && (
               <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 8 }}>
-                <div style={{ fontSize: '0.65rem', fontWeight: 700, color: '#475569', letterSpacing: '1.5px', textTransform: 'uppercase' }}>Otázka</div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div style={{ fontSize: '0.65rem', fontWeight: 700, color: '#475569', letterSpacing: '1.5px', textTransform: 'uppercase' }}>Otázka</div>
+                  <button
+                    onClick={async () => {
+                      if (!token || !gameState.activeField) return
+                      const res = await fetch(`/api/questions/for-field/${gameState.activeField}/reroll`, {
+                        method: 'POST',
+                        headers: { Authorization: `Bearer ${token}` },
+                      })
+                      if (res.ok) setQuestion(await res.json())
+                    }}
+                    style={{ padding: '3px 10px', borderRadius: 6, border: '1px solid rgba(251,191,36,0.3)', background: 'rgba(251,191,36,0.07)', color: '#fbbf24', fontWeight: 600, cursor: 'pointer', fontSize: '0.72rem' }}>
+                    ↺ Jiná otázka
+                  </button>
+                </div>
                 <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 12, padding: 14, display: 'flex', flexDirection: 'column', gap: 10, flex: 1 }}>
                   <div style={{ fontSize: '1rem', fontWeight: 500, color: '#e2e8f0', lineHeight: 1.5 }}>{question.text}</div>
                   <div style={{ height: 1, background: 'rgba(255,255,255,0.08)' }} />
